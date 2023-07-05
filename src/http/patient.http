@@ -1,0 +1,25 @@
+# baseURL
+@baseURL = http://localhost:8080
+
+###
+# Find All Users
+GET {{ baseURL }}/patient
+
+###
+# Find User By Id
+GET {{ baseURL }}/patient/627b520dedab4e67359c285d
+
+###
+# Create User
+POST {{ baseURL }}/patient
+Content-Type: application/json
+
+{
+    "uniqueId": "627a5c516c3ffd708d4e9ab7",
+    "name":"teams",
+    "address": "1231fdsafd",
+    "metaData": {
+        "yesCount": 1,
+        "noCOunt": 0
+    },
+}
