@@ -16,8 +16,7 @@ const authMiddleware = async (req: RequestWithInfo, res: Response, next: NextFun
       }
 
       if (tokenData) {
-        // TODO: Token validation logic
-
+        // TODO: Token validation logic, Check in database
         next();
       } else {
         next(new HttpException(401, 'Wrong authentication token'));

@@ -16,8 +16,8 @@ Content-Type: application/json
 
 {
     "uniqueId": "627a5c516c3ffd708d4e9ab7",
-    "name":"teams",
-    "address": "1231fdsafd",
+    "name":"David",
+    "address": "Main street",
     "metaData": {
         "yesCount": 1,
         "noCOunt": 0
