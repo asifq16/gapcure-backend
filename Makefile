@@ -15,16 +15,16 @@
 # make push ENV=prod
 
 DOCKER_ID = jycontainertest.azurecr.io
-APP_NAME = patient:1.0.0
+APP_NAME = gapcure-backend:1.0.0
 
 ifeq ($(ENV),prod)
 	DOCKER_ID := jycontainersg.azurecr.io
-	APP_NAME = patient:1.0.1
+	APP_NAME = gapcure-backend:1.0.0
 endif
 
 ifeq ($(ENV),dev)
 	DOCKER_ID := jycontainerdev.azurecr.io
-	APP_NAME = patient:2.1.0
+	APP_NAME = gapcure-backend:1.0.0
 endif
 
 .PHONY: build
