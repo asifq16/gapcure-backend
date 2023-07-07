@@ -25,6 +25,6 @@ export const createHashPassword = async (password: string): Promise<string> => {
   return await hash(password, 10);
 };
 
-export const createUuid = async (): Promise<string> => {
+export const generateUuid = (): Promise<string> => {
   return uuidv4();
 };

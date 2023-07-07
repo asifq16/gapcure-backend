@@ -1,0 +1,3 @@
+export const DYNAMODB_TABLE_NAMES = {
+  PATIENT_TABLE: 'PATIENT',
+};
