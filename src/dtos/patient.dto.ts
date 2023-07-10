@@ -3,7 +3,7 @@ import { IsString, IsOptional, Allow } from 'class-validator';
 
 export class PatientDto {
   @IsString()
-  public uniqueId: string;
+  public unique_id: string;
 
   @IsString()
   public name: string;

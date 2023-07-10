@@ -3,29 +3,26 @@ import { DYNAMODB_TABLE_NAMES } from '../constants';
 const Patient = {
   AttributeDefinitions: [
     {
-      AttributeName: 'ID',
+      AttributeName: 'unique_id',
       AttributeType: 'S',
     },
     {
-      AttributeName: 'NAME',
+      AttributeName: 'name',
       AttributeType: 'S',
     },
-    /* {
-      AttributeName: 'ADDRESS',
-      AttributeType: 'S',
-    }, */
+
     {
-      AttributeName: 'Disease',
+      AttributeName: 'disease',
       AttributeType: 'S',
     },
   ],
   KeySchema: [
     {
-      AttributeName: 'ID',
+      AttributeName: 'unique_id',
       KeyType: 'HASH',
     },
     {
-      AttributeName: 'NAME',
+      AttributeName: 'name',
       KeyType: 'RANGE',
     },
   ],
@@ -42,11 +39,11 @@ const Patient = {
       KeySchema: [
         {
           KeyType: 'HASH',
-          AttributeName: 'Disease',
+          AttributeName: 'disease',
         },
         {
           KeyType: 'RANGE',
-          AttributeName: 'NAME',
+          AttributeName: 'name',
         },
       ],
     },

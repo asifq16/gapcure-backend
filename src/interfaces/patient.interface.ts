@@ -4,10 +4,10 @@ interface MetaDta {
 }
 
 export interface Patient {
-  id: string;
+  unique_id: string;
   name: string;
   address: string;
-  uniqueId: string;
+  disease: string;
   metaData: MetaDta;
 }
 
