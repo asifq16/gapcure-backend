@@ -19,14 +19,13 @@ class App {
 
   public corsOptions: any = {
     origin: function (origin, callback) {
-      console.log('Middleware origin', origin);
       if (origin === undefined) {
         callback(null, true);
       } else {
         const whitelist: String[] = ORIGIN?.split(',');
         let allow = false;
         whitelist.map(d => {
-          if (origin.indexOf(d) >= 0) {
+          if (origin.includes(d)) {
             allow = true;
           }
         });

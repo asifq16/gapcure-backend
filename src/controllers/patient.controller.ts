@@ -2,7 +2,6 @@ import { NextFunction, Response } from 'express';
 import { PatientDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
 import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
-import { Patient } from '@/interfaces/patient.interface';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
 import { generateUuid } from '@/utils/util';
 
@@ -30,7 +29,7 @@ class PatientController {
       Item: {},
     };
     try {
-      const patientData: Patient[] = await this.patientService.findAllPatient(params);
+      const patientData: Object[] = await this.patientService.findAllPatient(params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);

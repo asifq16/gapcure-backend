@@ -1,5 +1,5 @@
 import { HttpException } from '@exceptions/HttpException';
-import { Patient, PatientCreateOutPutDto } from '@/interfaces/patient.interface';
+import { Patient } from '@/interfaces/patient.interface';
 import { isEmpty } from '@utils/util';
 import { createToken } from '@/utils/jwt';
 import DynamoDB from '@/database/dynamoDB';
@@ -8,8 +8,9 @@ import { PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@
 
 class PatientService {
   public dynamoDB = new DynamoDB();
-  public async findAllPatient(params: PatientParamsDto): Promise<Patient[]> {
-    const result: Patient[] = await this.dynamoDB.scanItem(params);
+
+  public async findAllPatient(params: PatientParamsDto): Promise<Object[]> {
+    const result: Object[] = await this.dynamoDB.scanItem(params);
     return result;
   }
 
@@ -46,7 +47,7 @@ class PatientService {
       },
     };
     const findUser = await this.dynamoDB.getItemById(param);
-    if (!findUser) throw new HttpException(400, 'patient not found');
+    if (!findUser) throw new HttpException(400, 'Patient not found');
     const result: object = this.dynamoDB.updateItem(params);
     return { user: result };
   }

@@ -23,8 +23,6 @@ export default class DynamoDB {
   }
 
   connectDatabase() {
-    console.log('*** DYNAMODB_TABLE_NAMES', DYNAMODB_TABLE_NAMES);
-
     // Create a new DynamoDB instance
     const dynamodb = this.getDynamodbInstance();
 
@@ -37,7 +35,7 @@ export default class DynamoDB {
         console.log('Available tables:', data.TableNames);
 
         if (DB_SYNC === 'true') {
-          this.createTable();
+          // this.createTable();
           // this.deleteTable();
         }
       }
