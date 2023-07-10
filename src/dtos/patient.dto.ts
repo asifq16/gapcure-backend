@@ -15,3 +15,35 @@ export class PatientDto {
   @IsOptional()
   public metaData: object;
 }
+
+export class PatientParamsDto {
+  @IsString()
+  public TableName: string;
+
+  @Allow()
+  public Item: object;
+}
+
+export class PatientByIdParamsDto {
+  @IsString()
+  public TableName: string;
+
+  @Allow()
+  public Key: object;
+}
+
+export class PatientQueryParamsDto {
+  @IsString()
+  public TableName: string;
+
+  @IsOptional()
+  public Key: object;
+
+  @IsOptional()
+  public KeyConditionExpression: string;
+
+  @IsOptional()
+  public ExpressionAttributeValues: {
+    [key: string]: any;
+  };
+}

@@ -3,30 +3,23 @@ import { DYNAMODB_TABLE_NAMES } from '../constants';
 const Patient = {
   AttributeDefinitions: [
     {
-      AttributeName: 'ID',
+      AttributeName: 'uniqueId',
       AttributeType: 'S',
     },
     {
-      AttributeName: 'NAME',
+      AttributeName: 'name',
       AttributeType: 'S',
     },
-    /* {
-      AttributeName: 'ADDRESS',
-      AttributeType: 'S',
-    }, */
+
     {
-      AttributeName: 'Disease',
+      AttributeName: 'disease',
       AttributeType: 'S',
     },
   ],
   KeySchema: [
     {
-      AttributeName: 'ID',
+      AttributeName: 'uniqueId',
       KeyType: 'HASH',
-    },
-    {
-      AttributeName: 'NAME',
-      KeyType: 'RANGE',
     },
   ],
   GlobalSecondaryIndexes: [
@@ -42,11 +35,11 @@ const Patient = {
       KeySchema: [
         {
           KeyType: 'HASH',
-          AttributeName: 'Disease',
+          AttributeName: 'disease',
         },
         {
           KeyType: 'RANGE',
-          AttributeName: 'NAME',
+          AttributeName: 'name',
         },
       ],
     },
@@ -57,7 +50,7 @@ const Patient = {
   },
   TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
   StreamSpecification: {
-    StreamEnabled: false,
+    StreamEnabled: true,
   },
 };
 

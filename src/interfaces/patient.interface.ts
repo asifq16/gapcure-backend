@@ -4,10 +4,10 @@ interface MetaDta {
 }
 
 export interface Patient {
-  id: string;
+  uniqueId: string;
   name: string;
   address: string;
-  uniqueId: string;
+  disease: string;
   metaData: MetaDta;
 }
 
@@ -16,4 +16,9 @@ export interface CreateUserRequest {
   address: string;
   employeeId: string;
   metaData: MetaDta;
+}
+
+export interface PatientCreateOutPutDto {
+  token: string;
+  user: object;
 }
