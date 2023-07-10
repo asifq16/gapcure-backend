@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
 import { PatientSchema } from './schema/patient';
+import { PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
 
 export default class DynamoDB {
   constructor() {
@@ -72,7 +73,7 @@ export default class DynamoDB {
     );
   }
 
-  createItem = async (params: any) => {
+  createItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       return await dynamodb.put(params).promise();
@@ -81,7 +82,7 @@ export default class DynamoDB {
     }
   };
 
-  getItemById = async (params: any) => {
+  getItemById = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       const result = await dynamodb.get(params).promise();
@@ -92,7 +93,7 @@ export default class DynamoDB {
     }
   };
 
-  scanItem = async (params: any) => {
+  scanItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       const result = await dynamodb.scan(params).promise();
@@ -102,7 +103,7 @@ export default class DynamoDB {
     }
   };
 
-  queryItem = async (params: any) => {
+  queryItem = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       const result = await dynamodb.query(params).promise();
@@ -113,7 +114,7 @@ export default class DynamoDB {
     }
   };
 
-  deleteItem = async (params: any) => {
+  deleteItem = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       return await dynamodb.delete(params).promise();
@@ -122,7 +123,7 @@ export default class DynamoDB {
     }
   };
 
-  updateItem = async (params: any) => {
+  updateItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       return await dynamodb.put(params).promise();

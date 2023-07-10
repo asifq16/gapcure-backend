@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { PatientDto } from '@/dtos/patient.dto';
+import { PatientDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
 import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
 import { Patient } from '@/interfaces/patient.interface';
@@ -11,14 +11,14 @@ class PatientController {
 
   public createPatient = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
-      const userData: PatientDto = req.body;
-      userData.unique_id = `${generateUuid()}`;
+      const patientData: PatientDto = req.body;
+      patientData.uniqueId = `${generateUuid()}`;
       const params = {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-        Item: userData,
+        Item: patientData,
       };
-      const createUserData: object = await this.patientService.createPatient(params);
-      res.status(201).json({ data: createUserData });
+      const result = await this.patientService.createPatient(params);
+      res.status(201).json({ data: result, message: 'Patient created successfully' });
     } catch (error) {
       next(error);
     }
@@ -30,8 +30,8 @@ class PatientController {
       Item: {},
     };
     try {
-      const findAllUsersData: Patient[] = await this.patientService.findAllPatient(params);
-      res.status(200).json({ data: findAllUsersData });
+      const patientData: Patient[] = await this.patientService.findAllPatient(params);
+      res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
     }
@@ -42,11 +42,11 @@ class PatientController {
     const params = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       Key: {
-        unique_id: `${patientId}`,
+        uniqueId: `${patientId}`,
       },
     };
     try {
-      const patientData: Patient = await this.patientService.findPatientById(patientId, params);
+      const patientData = await this.patientService.findPatientById(patientId, params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
@@ -59,12 +59,11 @@ class PatientController {
       const params = {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
         Key: {
-          unique_id: `${patientId}`,
-          name: 'David',
+          uniqueId: `${patientId}`,
         },
       };
-      const patientData: Patient = await this.patientService.deletePatientById(patientId, params);
-      res.status(200).json({ data: patientData });
+      await this.patientService.deletePatientById(patientId, params);
+      res.status(200).json({ data: 'Item deleted successfully' });
     } catch (error) {
       next(error);
     }
@@ -78,29 +77,29 @@ class PatientController {
         Item: userData,
       };
       await this.patientService.updatePatient(params);
-      res.status(201).json({ data: 'Item updated successfully' });
+      res.status(200).json({ data: 'Item updated successfully' });
     } catch (error) {
       next(error);
     }
   };
   public getByQuery = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     const patientId: string = req.params.id;
-    const params = {
+    const params: PatientQueryParamsDto = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-      ExpressionAttributeNames: {
-        '#attributeName': patientId, // Replace with the actual attribute name
+      KeyConditionExpression: 'uniqueId = :patientId',
+      ExpressionAttributeValues: {
+        ':patientId': patientId,
       },
-      ExpressionAttributeValues: {},
-    } as AWS.DynamoDB.DocumentClient.ScanInput;
+      Key: {},
+    };
 
-    const filterValue = 'david'; // Replace with the desired attribute value
+    const filterValue = ''; // Replace with the desired attribute value
 
     if (filterValue) {
-      params.FilterExpression = '#attributeName = :value';
       params.ExpressionAttributeValues[':value'] = { S: filterValue };
     }
     try {
-      const patientData: Patient = await this.patientService.findByQuery(params);
+      const patientData = await this.patientService.findByQuery(params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);

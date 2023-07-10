@@ -3,7 +3,7 @@ import { DYNAMODB_TABLE_NAMES } from '../constants';
 const Patient = {
   AttributeDefinitions: [
     {
-      AttributeName: 'unique_id',
+      AttributeName: 'uniqueId',
       AttributeType: 'S',
     },
     {
@@ -18,12 +18,8 @@ const Patient = {
   ],
   KeySchema: [
     {
-      AttributeName: 'unique_id',
+      AttributeName: 'uniqueId',
       KeyType: 'HASH',
-    },
-    {
-      AttributeName: 'name',
-      KeyType: 'RANGE',
     },
   ],
   GlobalSecondaryIndexes: [
@@ -54,7 +50,7 @@ const Patient = {
   },
   TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
   StreamSpecification: {
-    StreamEnabled: false,
+    StreamEnabled: true,
   },
 };
 
