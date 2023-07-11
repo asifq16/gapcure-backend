@@ -4,12 +4,12 @@ import { isEmpty } from '@utils/util';
 import { createToken } from '@/utils/jwt';
 import DynamoDB from '@/database/dynamoDB';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
-import { PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
+import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
 
 class PatientService {
   public dynamoDB = new DynamoDB();
 
-  public async findAllPatient(params: PatientParamsDto): Promise<Object[]> {
+  public async findAllPatient(params: AllPatientParamsDto): Promise<Object[]> {
     const result: Object[] = await this.dynamoDB.scanItem(params);
     return result;
   }
@@ -35,7 +35,7 @@ class PatientService {
     };
     const token: string = await createToken(jwtEncryptionObject, '24h');
     const result: object = await this.dynamoDB.createItem(params);
-    return { user: result, token };
+    return { patient: result, token };
   }
 
   public async updatePatient(params: PatientParamsDto): Promise<object> {

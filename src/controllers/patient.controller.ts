@@ -17,7 +17,7 @@ class PatientController {
         Item: patientData,
       };
       const result = await this.patientService.createPatient(params);
-      res.status(201).json({ data: result, message: 'Patient created successfully' });
+      res.status(201).json({ data: result });
     } catch (error) {
       next(error);
     }

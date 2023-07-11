@@ -2,7 +2,7 @@ import AWS from 'aws-sdk';
 import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
 import { PatientSchema } from './schema/patient';
-import { PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
+import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
 
 export default class DynamoDB {
   constructor() {
@@ -74,7 +74,16 @@ export default class DynamoDB {
   createItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
-      return await dynamodb.put(params).promise();
+      await dynamodb.put(params).promise();
+      const getParams = {
+        TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+        Key: {
+          uniqueId: params.Item.uniqueId,
+        },
+      };
+      const getResult = await this.getItemById(getParams);
+      const createdItem = getResult; // The newly created or updated item
+      return createdItem;
     } catch (error) {
       throw error;
     }
@@ -91,7 +100,7 @@ export default class DynamoDB {
     }
   };
 
-  scanItem = async (params: PatientParamsDto) => {
+  scanItem = async (params: AllPatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
     try {
       const result = await dynamodb.scan(params).promise();
