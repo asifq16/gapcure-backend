@@ -32,6 +32,11 @@ export class PatientParamsDto {
   public Item: PatientDto;
 }
 
+export class PythoScoreDto {
+  @IsString()
+  public identifier: string;
+}
+
 export class PatientByIdParamsDto {
   @IsString()
   public TableName: string;

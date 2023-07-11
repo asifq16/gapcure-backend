@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import PatientController from '@/controllers/patient.controller';
-import { PatientDto } from '@/dtos/patient.dto';
+import { PatientDto, PythoScoreDto } from '@/dtos/patient.dto';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import authMiddleware from '@/middlewares/auth.middleware';
@@ -20,6 +20,7 @@ class UsersRoute implements Routes {
     this.router.get(`${this.path}/:id`, authMiddleware, this.patientController.getPatientById);
     this.router.get(`${this.path}/delete/:id`, authMiddleware, this.patientController.deletePatientById);
     this.router.patch(`${this.path}/update`, validationMiddleware(PatientDto, 'body'), this.patientController.updatePatient);
+    this.router.post(`${this.path}/get-pytho-score`, validationMiddleware(PythoScoreDto, 'body'), this.patientController.getPythoScore);
   }
 }
 
