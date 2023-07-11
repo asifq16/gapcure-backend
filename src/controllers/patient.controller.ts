@@ -4,9 +4,11 @@ import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
 import { generateUuid } from '@/utils/util';
+import HealthGorillaService from '@/services/healthGorilla.service';
 
 class PatientController {
   public patientService = new patientService();
+  public healthGorillaService = new HealthGorillaService();
 
   public createPatient = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
@@ -17,7 +19,7 @@ class PatientController {
         Item: patientData,
       };
       const result = await this.patientService.createPatient(params);
-      res.status(201).json({ data: result });
+      res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -29,7 +31,7 @@ class PatientController {
       Item: {},
     };
     try {
-      const patientData: Object[] = await this.patientService.findAllPatient(params);
+      const patientData = await this.patientService.findAllPatient(params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
@@ -75,12 +77,13 @@ class PatientController {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
         Item: userData,
       };
-      await this.patientService.updatePatient(params);
-      res.status(200).json({ data: 'Item updated successfully' });
+      const result = await this.patientService.updatePatient(params);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
   };
+
   public getByQuery = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     const patientId: string = req.params.id;
     const params: PatientQueryParamsDto = {
@@ -99,6 +102,16 @@ class PatientController {
     }
     try {
       const patientData = await this.patientService.findByQuery(params);
+      res.status(200).json({ data: patientData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getPythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    try {
+      const identifier: string = req.body.identifier;
+      const patientData = await this.healthGorillaService.getPatientInfo(identifier);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);

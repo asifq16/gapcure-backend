@@ -73,10 +73,11 @@ export default class DynamoDB {
 
   createItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
       await dynamodb.put(params).promise();
       const getParams = {
-        TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+        TableName: params.TableName,
         Key: {
           uniqueId: params.Item.uniqueId,
         },
@@ -91,6 +92,7 @@ export default class DynamoDB {
 
   getItemById = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
       const result = await dynamodb.get(params).promise();
       const item = result.Item;
@@ -102,6 +104,7 @@ export default class DynamoDB {
 
   scanItem = async (params: AllPatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
       const result = await dynamodb.scan(params).promise();
       return result.Items;
@@ -112,6 +115,7 @@ export default class DynamoDB {
 
   queryItem = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
       const result = await dynamodb.query(params).promise();
       const data = result.Items;
@@ -123,6 +127,7 @@ export default class DynamoDB {
 
   deleteItem = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
       return await dynamodb.delete(params).promise();
     } catch (error) {
@@ -132,10 +137,19 @@ export default class DynamoDB {
 
   updateItem = async (params: PatientParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
+
     try {
-      return await dynamodb.put(params).promise();
+      await dynamodb.put(params).promise();
+      const getParams = {
+        TableName: params.TableName,
+        Key: {
+          uniqueId: params.Item.uniqueId,
+        },
+      };
+      const getResult = await this.getItemById(getParams);
+      const updatedItem = getResult; // The newly created or updated item
+      return updatedItem;
     } catch (error) {
-      console.error('Error updating item:', error);
       throw error;
     }
   };

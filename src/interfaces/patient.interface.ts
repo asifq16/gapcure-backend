@@ -1,4 +1,4 @@
-interface MetaDta {
+export interface MetaDta {
   yesCount: number;
   noCount: number;
 }
@@ -10,6 +10,7 @@ export interface Patient {
   disease: string;
   metaData: MetaDta;
 }
+
 export interface CreateUserRequest {
   name: string;
   address: string;
@@ -17,8 +18,21 @@ export interface CreateUserRequest {
   metaData: MetaDta;
 }
 export interface PatientCreateOutPutDto {
+  patient: Patient;
+  token: string;
+}
+
+export interface PatientUpdateOutPutDto {
+  patient: Patient;
+}
+
+export interface PatientOutput {
   data: {
     token: string;
-    user: Patient;
+    patient: Patient;
   };
+}
+
+export interface PatientOutputs {
+  Items: Patient[];
 }
