@@ -17,7 +17,7 @@ class PatientController {
         Item: patientData,
       };
       const result = await this.patientService.createPatient(params);
-      res.status(201).json({ data: result });
+      res.status(201).json(result);
     } catch (error) {
       next(error);
     }
@@ -29,7 +29,7 @@ class PatientController {
       Item: {},
     };
     try {
-      const patientData: Object[] = await this.patientService.findAllPatient(params);
+      const patientData = await this.patientService.findAllPatient(params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
@@ -75,8 +75,8 @@ class PatientController {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
         Item: userData,
       };
-      await this.patientService.updatePatient(params);
-      res.status(200).json({ data: 'Item updated successfully' });
+      const result = await this.patientService.updatePatient(params);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
