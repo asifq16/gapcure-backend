@@ -10,15 +10,15 @@ export interface Patient {
   disease: string;
   metaData: MetaDta;
 }
-
 export interface CreateUserRequest {
   name: string;
   address: string;
   employeeId: string;
   metaData: MetaDta;
 }
-
 export interface PatientCreateOutPutDto {
-  token: string;
-  user: object;
+  data: {
+    token: string;
+    user: Patient;
+  };
 }

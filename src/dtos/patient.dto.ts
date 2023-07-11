@@ -16,12 +16,20 @@ export class PatientDto {
   public metaData: object;
 }
 
-export class PatientParamsDto {
+export class AllPatientParamsDto {
   @IsString()
   public TableName: string;
 
   @Allow()
   public Item: object;
+}
+
+export class PatientParamsDto {
+  @IsString()
+  public TableName: string;
+
+  @Allow()
+  public Item: PatientDto;
 }
 
 export class PatientByIdParamsDto {
