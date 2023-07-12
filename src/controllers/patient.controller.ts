@@ -29,14 +29,14 @@ class PatientController {
     const params = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       Item: {},
-      FilterExpression: '#name = :g AND #address = :a',
+      FilterExpression: '#name = :name AND #address = :address',
       ExpressionAttributeNames: {
         '#name': 'name',
         '#address': 'address',
       },
       ExpressionAttributeValues: {
-        ':g': 'John',
-        ':a': 'nStreet',
+        ':name': 'John',
+        ':address': 'nStreet',
       },
       ProjectionExpression: '#name, uniqueId, #address',
     };
@@ -100,10 +100,10 @@ class PatientController {
     const params: PatientQueryParamsDto = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       KeyConditionExpression: 'uniqueId = :patientId',
-      FilterExpression: 'address = :a',
+      FilterExpression: 'address = :address',
       ExpressionAttributeValues: {
         ':patientId': patientId,
-        ':a': 'new Street1',
+        ':address': 'new Street1',
       },
 
       Key: {},
