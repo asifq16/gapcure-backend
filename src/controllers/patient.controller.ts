@@ -1,12 +1,14 @@
 import { NextFunction, Response } from 'express';
-import { PatientDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
+import { PatientDto } from '@/dtos/patient.dto';
 import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
 import { generateUuid } from '@/utils/util';
+import HealthGorillaService from '@/services/healthGorilla.service';
 
 class PatientController {
   public patientService = new patientService();
+  public healthGorillaService = new HealthGorillaService();
 
   public createPatient = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
@@ -107,6 +109,16 @@ class PatientController {
       };
       const result = await this.patientService.updatePatient(params);
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getPythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    try {
+      const identifier: string = req.body.identifier;
+      const patientData = await this.healthGorillaService.getPatientInfo(identifier);
+      res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
     }

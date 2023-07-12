@@ -4,7 +4,7 @@ import { isEmpty } from '@utils/util';
 import { createToken } from '@/utils/jwt';
 import DynamoDB from '@/database/dynamoDB';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
-import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
+import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
 import { AttributeMap } from 'aws-sdk/clients/dynamodb';
 
 class PatientService {
