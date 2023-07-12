@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { PatientDto } from '@/dtos/patient.dto';
+import { PatientDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
 import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
@@ -26,42 +26,23 @@ class PatientController {
   };
 
   public getPatients = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
-    const filterValue = req.query;
-
     const params = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       Item: {},
-      FilterExpression: '',
-      ExpressionAttributeNames: {},
-      ExpressionAttributeValues: {},
-      ProjectionExpression: '#name, uniqueId, address',
+      FilterExpression: '#name = :g AND #address = :a',
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#address': 'address',
+      },
+      ExpressionAttributeValues: {
+        ':g': 'John',
+        ':a': 'nStreet',
+      },
+      ProjectionExpression: '#name, uniqueId, #address',
     };
 
-    const param = {
-      TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-      Item: {},
-    };
-
-    if (filterValue !== undefined) {
-      const filterExpressionParts = [];
-      const expressionAttributeNames = {};
-      const expressionAttributeValues = {};
-
-      Object.entries(filterValue).forEach(([attribute, value]) => {
-        const expressionAttributeKey = `#${attribute}`;
-        const expressionAttributeValueKey = `:${attribute}`;
-
-        filterExpressionParts.push(`${expressionAttributeKey} = ${expressionAttributeValueKey}`);
-        expressionAttributeNames[expressionAttributeKey] = attribute;
-        expressionAttributeValues[expressionAttributeValueKey] = value;
-      });
-
-      params.FilterExpression = filterExpressionParts.join(' AND ');
-      params.ExpressionAttributeNames = expressionAttributeNames;
-      params.ExpressionAttributeValues = expressionAttributeValues;
-    }
     try {
-      const patientData = await this.patientService.findAllPatient(Object.keys(filterValue).length === 0 ? param : params);
+      const patientData = await this.patientService.findAllPatient(params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
@@ -109,6 +90,33 @@ class PatientController {
       };
       const result = await this.patientService.updatePatient(params);
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getByQuery = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    const patientId: string = req.params.id || '1e054a0e-ef55-443d-92ed-1b4db0166aa5';
+    const params: PatientQueryParamsDto = {
+      TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+      KeyConditionExpression: 'uniqueId = :patientId',
+      FilterExpression: 'address = :a',
+      ExpressionAttributeValues: {
+        ':patientId': patientId,
+        ':a': 'new Street1',
+      },
+
+      Key: {},
+    };
+
+    const filterValue = ''; // Replace with the desired attribute value
+
+    if (filterValue) {
+      params.ExpressionAttributeValues[':value'] = { S: filterValue };
+    }
+    try {
+      const patientData = await this.patientService.findByQuery(params);
+      res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
     }

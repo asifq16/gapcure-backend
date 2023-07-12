@@ -4,7 +4,7 @@ import { isEmpty } from '@utils/util';
 import { createToken } from '@/utils/jwt';
 import DynamoDB from '@/database/dynamoDB';
 import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
-import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
+import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
 import { AttributeMap } from 'aws-sdk/clients/dynamodb';
 
 class PatientService {
@@ -89,6 +89,11 @@ class PatientService {
   public async deletePatientById(patientId: string, params: PatientByIdParamsDto): Promise<object> {
     if (isEmpty(patientId)) throw new HttpException(400, 'Incorrect patient id');
     const result = await this.dynamoDB.deleteItem(params);
+    return result;
+  }
+
+  public async findByQuery(params: PatientQueryParamsDto): Promise<object> {
+    const result: object = await this.dynamoDB.queryItem(params);
     return result;
   }
 }
