@@ -29,7 +29,18 @@ class PatientController {
     const params = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       Item: {},
+      FilterExpression: '#name = :g AND #address = :a',
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#address': 'address',
+      },
+      ExpressionAttributeValues: {
+        ':g': 'John',
+        ':a': 'nStreet',
+      },
+      ProjectionExpression: '#name, uniqueId, #address',
     };
+
     try {
       const patientData = await this.patientService.findAllPatient(params);
       res.status(200).json({ data: patientData });
@@ -85,13 +96,16 @@ class PatientController {
   };
 
   public getByQuery = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
-    const patientId: string = req.params.id;
+    const patientId: string = req.params.id || '1e054a0e-ef55-443d-92ed-1b4db0166aa5';
     const params: PatientQueryParamsDto = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       KeyConditionExpression: 'uniqueId = :patientId',
+      FilterExpression: 'address = :a',
       ExpressionAttributeValues: {
         ':patientId': patientId,
+        ':a': 'new Street1',
       },
+
       Key: {},
     };
 

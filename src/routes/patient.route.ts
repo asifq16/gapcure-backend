@@ -16,7 +16,8 @@ class UsersRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post(`${this.path}`, validationMiddleware(PatientDto, 'body'), this.patientController.createPatient);
-    this.router.get(`${this.path}`, authMiddleware, this.patientController.getPatients);
+    this.router.get(`${this.path}/`, authMiddleware, this.patientController.getPatients);
+    this.router.get(`${this.path}/get-by-Query`, authMiddleware, this.patientController.getByQuery);
     this.router.get(`${this.path}/:id`, authMiddleware, this.patientController.getPatientById);
     this.router.get(`${this.path}/delete/:id`, authMiddleware, this.patientController.deletePatientById);
     this.router.patch(`${this.path}/update`, validationMiddleware(PatientDto, 'body'), this.patientController.updatePatient);

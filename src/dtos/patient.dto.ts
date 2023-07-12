@@ -59,4 +59,7 @@ export class PatientQueryParamsDto {
   public ExpressionAttributeValues: {
     [key: string]: any;
   };
+
+  @IsOptional()
+  public FilterExpression: string;
 }
