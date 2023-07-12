@@ -24,12 +24,42 @@ class PatientController {
   };
 
   public getPatients = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    const filterValue = req.query;
+
     const params = {
       TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
       Item: {},
+      FilterExpression: '',
+      ExpressionAttributeNames: {},
+      ExpressionAttributeValues: {},
+      ProjectionExpression: '#name, uniqueId, address',
     };
+
+    const param = {
+      TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+      Item: {},
+    };
+
+    if (filterValue !== undefined) {
+      const filterExpressionParts = [];
+      const expressionAttributeNames = {};
+      const expressionAttributeValues = {};
+
+      Object.entries(filterValue).forEach(([attribute, value]) => {
+        const expressionAttributeKey = `#${attribute}`;
+        const expressionAttributeValueKey = `:${attribute}`;
+
+        filterExpressionParts.push(`${expressionAttributeKey} = ${expressionAttributeValueKey}`);
+        expressionAttributeNames[expressionAttributeKey] = attribute;
+        expressionAttributeValues[expressionAttributeValueKey] = value;
+      });
+
+      params.FilterExpression = filterExpressionParts.join(' AND ');
+      params.ExpressionAttributeNames = expressionAttributeNames;
+      params.ExpressionAttributeValues = expressionAttributeValues;
+    }
     try {
-      const patientData = await this.patientService.findAllPatient(params);
+      const patientData = await this.patientService.findAllPatient(Object.keys(filterValue).length === 0 ? param : params);
       res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
@@ -77,29 +107,6 @@ class PatientController {
       };
       const result = await this.patientService.updatePatient(params);
       res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  };
-  public getByQuery = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
-    const patientId: string = req.params.id;
-    const params: PatientQueryParamsDto = {
-      TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-      KeyConditionExpression: 'uniqueId = :patientId',
-      ExpressionAttributeValues: {
-        ':patientId': patientId,
-      },
-      Key: {},
-    };
-
-    const filterValue = ''; // Replace with the desired attribute value
-
-    if (filterValue) {
-      params.ExpressionAttributeValues[':value'] = { S: filterValue };
-    }
-    try {
-      const patientData = await this.patientService.findByQuery(params);
-      res.status(200).json({ data: patientData });
     } catch (error) {
       next(error);
     }

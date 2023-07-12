@@ -91,11 +91,6 @@ class PatientService {
     const result = await this.dynamoDB.deleteItem(params);
     return result;
   }
-
-  public async findByQuery(params: PatientQueryParamsDto): Promise<object> {
-    const result: object = await this.dynamoDB.queryItem(params);
-    return result;
-  }
 }
 
 export default PatientService;

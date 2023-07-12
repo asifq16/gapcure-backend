@@ -113,18 +113,6 @@ export default class DynamoDB {
     }
   };
 
-  queryItem = async (params: PatientByIdParamsDto) => {
-    const dynamodb = this.getDynamoClientInstance();
-
-    try {
-      const result = await dynamodb.query(params).promise();
-      const data = result.Items;
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
   deleteItem = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
 
