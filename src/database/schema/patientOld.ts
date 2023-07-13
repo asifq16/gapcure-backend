@@ -3,21 +3,22 @@ import { DYNAMODB_TABLE_NAMES } from '../constants';
 const Patient = {
   AttributeDefinitions: [
     {
-      AttributeName: 'Id',
+      AttributeName: 'uniqueId',
       AttributeType: 'S',
     },
     {
-      AttributeName: 'Name',
+      AttributeName: 'name',
       AttributeType: 'S',
     },
+
     {
-      AttributeName: 'Identifier',
+      AttributeName: 'disease',
       AttributeType: 'S',
     },
   ],
   KeySchema: [
     {
-      AttributeName: 'Id',
+      AttributeName: 'uniqueId',
       KeyType: 'HASH',
     },
   ],
@@ -34,11 +35,11 @@ const Patient = {
       KeySchema: [
         {
           KeyType: 'HASH',
-          AttributeName: 'Identifier',
+          AttributeName: 'disease',
         },
         {
           KeyType: 'RANGE',
-          AttributeName: 'Name',
+          AttributeName: 'name',
         },
       ],
     },
@@ -50,7 +51,6 @@ const Patient = {
   TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
   StreamSpecification: {
     StreamEnabled: true,
-    StreamViewType: 'NEW_AND_OLD_IMAGES', // Add this line to specify the stream view type
   },
 };
 

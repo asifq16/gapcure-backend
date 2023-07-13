@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API } from '@/utils/constants';
+import { PYTHO_SCORE__PATIENT_API, PYTHO_SCORE_BASE_URL, PYTHO_SCORE_AUTH_API } from '@/utils/constants';
 import axios, { AxiosResponse } from 'axios';
 import patientJson from './patient.json';
 import {PatientInfOutputDTO} from '@/interfaces/patientNew.interface';
 import { HttpException } from '@/exceptions/HttpException';
 
 
-class HealthGorillaService {
+class PythoScoreService {
   /**
    * Function to get access token from Health Gorilla APIs
    */
@@ -19,7 +19,7 @@ class HealthGorillaService {
         scope: 'user/*.*',
       };
 
-      return await axios.post(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_AUTH_API}`, payload, {
+      return await axios.post(`${PYTHO_SCORE_BASE_URL}/${PYTHO_SCORE_AUTH_API}`, payload, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from Health Gorilla API
    */
-  public async getPatientInfo(identifier: string): Promise<PatientInfOutputDTO> {
+  public async getPythoScore(identifier: string): Promise<PatientInfOutputDTO> {
     return patientJson;
     const authResponse: AxiosResponse = await this.getToken();
     if (!authResponse?.data) {
@@ -45,7 +45,7 @@ class HealthGorillaService {
     const token = authResponse?.data?.token;
 
     // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-    return await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
+    return await axios.get(`${PYTHO_SCORE_BASE_URL}/${PYTHO_SCORE__PATIENT_API}/${identifier}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -55,4 +55,4 @@ class HealthGorillaService {
   }
 }
 
-export default HealthGorillaService;
+export default PythoScoreService;
