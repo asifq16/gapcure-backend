@@ -1,100 +1,69 @@
 import { HttpException } from '@exceptions/HttpException';
-import { MetaDta, Patient, PatientCreateOutPutDto, PatientUpdateOutPutDto } from '@/interfaces/patient.interface';
 import { isEmpty } from '@utils/util';
-import { createToken } from '@/utils/jwt';
 import DynamoDB from '@/database/dynamoDB';
-import { DYNAMODB_TABLE_NAMES } from '@/database/constants';
-import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto, PatientQueryParamsDto } from '@/dtos/patient.dto';
-import { AttributeMap } from 'aws-sdk/clients/dynamodb';
+import { PatientByIdParamsDto } from '@/dtos/patient.dto';
+import { PatientInfOutput, PatientUpdateOutPut, patientParamsInput } from '@/interfaces/patient.interface';
 
 class PatientService {
   public dynamoDB = new DynamoDB();
 
-  public async findAllPatient(params: AllPatientParamsDto): Promise<Patient[]> {
-    const result = await this.dynamoDB.scanItem(params);
-    const patients: Patient[] = result.map((item: AttributeMap) => {
-      const patient: Patient = {
-        uniqueId: item.uniqueId as string,
-        name: item.name as string,
-        address: item.address as string,
-        disease: item.disease as string,
-        metaData: item.metaData as MetaDta,
-      };
-      return patient;
-    });
-    return patients;
-  }
-
-  public async findPatientById(patientId: string, params: PatientByIdParamsDto): Promise<Patient> {
-    if (isEmpty(patientId)) throw new HttpException(400, 'Incorrect patient id');
+  public async findPatientById(params: PatientByIdParamsDto): Promise<PatientUpdateOutPut> {
+    if (isEmpty(params?.Key?.id)) throw new HttpException(400, 'Incorrect patient id');
     const result = await this.dynamoDB.getItemById(params);
     if (result) {
-      const patient: Patient = {
-        uniqueId: result.uniqueId,
+      const patientData: PatientInfOutput = {
+        resourceType: result.resourceType,
+        identifier: result.Identifier,
+        active: result.patientData.active,
         name: result.name,
-        address: result.address,
-        disease: result.disease,
-        metaData: result.metaData,
+        telecom: result.patientData.telecom,
+        gender: result.patientData.gender,
+        birthDate: result.patientData.birthDate,
+        deceasedBoolean: result.patientData.deceasedBoolean,
+        address: result.patientData.address,
+        maritalStatus: result.patientData.maritalStatus,
+        multipleBirthBoolean: result.patientData.multipleBirthBoolean,
+        photo: result.patientData.photo,
+        contact: result.patientData.contact,
+        communication: result.patientData.communication,
+        generalPractitioner: result.patientData.generalPractitioner,
+        managingOrganization: result.patientData.managingOrganization,
+        link: result.patientData.link,
       };
-      return patient;
+
+      const output: PatientUpdateOutPut = {
+        patient: patientData,
+      };
+      return output;
     }
   }
 
-  public async createPatient(params: PatientParamsDto): Promise<PatientCreateOutPutDto> {
-    const jwtEncryptionObject: object = {
-      id: 'id',
-    };
-    const token: string = await createToken(jwtEncryptionObject, '24h');
-    const result: AttributeMap = await this.dynamoDB.createItem(params);
-    const patientData: Patient = {
-      uniqueId: result.uniqueId as string,
-      name: result.name as string,
-      address: result.address as string,
-      disease: '',
-      metaData: undefined,
-    };
-
-    const output: PatientCreateOutPutDto = {
-      patient: patientData,
-      token,
-    };
-    return output;
-  }
-
-  public async updatePatient(params: PatientParamsDto): Promise<PatientUpdateOutPutDto> {
-    if (isEmpty(params.Item)) throw new HttpException(400, 'Incorrect patient id');
-    const param = {
-      TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-      Key: {
-        uniqueId: `${params.Item.uniqueId}`,
-      },
-    };
-    const findUser = await this.dynamoDB.getItemById(param);
-    if (!findUser) throw new HttpException(400, 'Patient not found');
-    const result: AttributeMap = await this.dynamoDB.updateItem(params);
-    const patientData: Patient = {
-      uniqueId: result.uniqueId as string,
-      name: result.name as string,
-      address: result.address as string,
-      disease: '',
-      metaData: undefined,
+  public async updatePatient(params: patientParamsInput): Promise<PatientUpdateOutPut> {
+    const result = await this.dynamoDB.updateItem(params);
+    const patientData: PatientInfOutput = {
+      resourceType: result.resourceType,
+      identifier: result.Identifier,
+      active: result.patientData.active,
+      name: result.name,
+      telecom: result.patientData.telecom,
+      gender: result.patientData.gender,
+      birthDate: result.patientData.birthDate,
+      deceasedBoolean: result.patientData.deceasedBoolean,
+      address: result.patientData.address,
+      maritalStatus: result.patientData.maritalStatus,
+      multipleBirthBoolean: result.patientData.multipleBirthBoolean,
+      photo: result.patientData.photo,
+      contact: result.patientData.contact,
+      communication: result.patientData.communication,
+      generalPractitioner: result.patientData.generalPractitioner,
+      managingOrganization: result.patientData.managingOrganization,
+      link: result.patientData.link,
     };
 
-    const output: PatientUpdateOutPutDto = {
+    const output: PatientUpdateOutPut = {
       patient: patientData,
     };
     return output;
-  }
-
-  public async deletePatientById(patientId: string, params: PatientByIdParamsDto): Promise<object> {
-    if (isEmpty(patientId)) throw new HttpException(400, 'Incorrect patient id');
-    const result = await this.dynamoDB.deleteItem(params);
-    return result;
-  }
-
-  public async findByQuery(params: PatientQueryParamsDto): Promise<object> {
-    const result: object = await this.dynamoDB.queryItem(params);
-    return result;
   }
 }
 

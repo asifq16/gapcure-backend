@@ -1,8 +1,13 @@
-import { HttpException } from '@/exceptions/HttpException';
 import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API } from '@/utils/constants';
 import axios, { AxiosResponse } from 'axios';
+import patientJson from './mockData/patient.json';
+import { HttpException } from '@/exceptions/HttpException';
+import PatientService from './patient.service';
+import { PatientInfOutput } from '@/interfaces/patient.interface';
+import { PatientByIdParamsDto } from '@/dtos/patient.dto';
 
 class HealthGorillaService {
+  public patientService = new PatientService();
   /**
    * Function to get access token from Health Gorilla APIs
    */
@@ -31,22 +36,32 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from Health Gorilla API
    */
-  public async getPatientInfo(identifier: string): Promise<AxiosResponse> {
-    const authResponse: AxiosResponse = await this.getToken();
-    if (!authResponse?.data) {
-      throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
+  public async getPatientInfo(moke: boolean, idParams: PatientByIdParamsDto): Promise<PatientInfOutput> {
+    let patientData: PatientInfOutput = patientJson;
+    if (moke) {
+      return patientData;
+    } else {
+      if (!patientData) {
+        patientData = await this.patientService.findPatientById(idParams);
+        return patientData;
+      } else {
+        const authResponse: AxiosResponse = await this.getToken();
+        if (!authResponse?.data) {
+          throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
+        }
+
+        const token = authResponse?.data?.token;
+        // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
+        await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${idParams?.Key?.id}`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return patientData;
+      }
     }
-
-    const token = authResponse?.data?.token;
-
-    // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-    return await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
   }
 }
 

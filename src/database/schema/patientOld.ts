@@ -3,25 +3,22 @@ import { DYNAMODB_TABLE_NAMES } from '../constants';
 const Patient = {
   AttributeDefinitions: [
     {
-      AttributeName: 'id',
+      AttributeName: 'uniqueId',
       AttributeType: 'S',
     },
     {
       AttributeName: 'name',
       AttributeType: 'S',
     },
+
     {
-      AttributeName: 'identifier',
-      AttributeType: 'S',
-    },
-    {
-      AttributeName: 'pythoScore',
+      AttributeName: 'disease',
       AttributeType: 'S',
     },
   ],
   KeySchema: [
     {
-      AttributeName: 'id',
+      AttributeName: 'uniqueId',
       KeyType: 'HASH',
     },
   ],
@@ -38,27 +35,11 @@ const Patient = {
       KeySchema: [
         {
           KeyType: 'HASH',
-          AttributeName: 'identifier',
+          AttributeName: 'disease',
         },
         {
           KeyType: 'RANGE',
           AttributeName: 'name',
-        },
-      ],
-    },
-    {
-      IndexName: 'PythoScore-index',
-      Projection: {
-        ProjectionType: 'ALL',
-      },
-      ProvisionedThroughput: {
-        WriteCapacityUnits: 5,
-        ReadCapacityUnits: 5,
-      },
-      KeySchema: [
-        {
-          KeyType: 'HASH',
-          AttributeName: 'pythoScore',
         },
       ],
     },
@@ -70,7 +51,6 @@ const Patient = {
   TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
   StreamSpecification: {
     StreamEnabled: true,
-    StreamViewType: 'NEW_AND_OLD_IMAGES',
   },
 };
 

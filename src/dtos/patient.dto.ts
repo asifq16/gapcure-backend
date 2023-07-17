@@ -1,21 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { IsString, IsOptional, Allow } from 'class-validator';
 
-export class PatientDto {
-  @IsString()
-  public uniqueId: string;
-
-  @IsString()
-  public name: string;
-
-  @IsString()
-  public address: string;
-
-  @Allow()
-  @IsOptional()
-  public metaData: object;
-}
-
 export class AllPatientParamsDto {
   @IsString()
   public TableName: string;
@@ -24,12 +9,17 @@ export class AllPatientParamsDto {
   public Item: object;
 }
 
+export class Item {
+  @IsString()
+  public id: string;
+}
+
 export class PatientParamsDto {
   @IsString()
   public TableName: string;
 
   @Allow()
-  public Item: PatientDto;
+  public Item: Item;
 }
 
 export class PythoScoreDto {
@@ -42,7 +32,7 @@ export class PatientByIdParamsDto {
   public TableName: string;
 
   @Allow()
-  public Key: object;
+  public Key: Item;
 }
 
 export class PatientQueryParamsDto {
@@ -62,4 +52,22 @@ export class PatientQueryParamsDto {
 
   @IsOptional()
   public FilterExpression: string;
+}
+
+export class PatientDto {
+  @IsString()
+  public id: string;
+
+  @IsString()
+  public name: string;
+
+  @IsString()
+  public identifier: string;
+
+  @IsString()
+  public pythoScore: string;
+
+  @Allow()
+  @IsOptional()
+  public patientData: object;
 }
