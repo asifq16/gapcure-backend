@@ -36,31 +36,33 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from Health Gorilla API
    */
-  public async getPatientInfo(moke: boolean, idParams: PatientByIdParamsDto): Promise<PatientInfOutput> {
-    let patientData: PatientInfOutput = patientJson;
-    if (moke) {
+  public async getPatientInfo(params: PatientByIdParamsDto, mock = false): Promise<PatientInfOutput> {
+    let patientData: PatientInfOutput;
+
+    if (mock) {
+      patientData = patientJson;
+      return patientData;
+    }
+
+    if (!patientData) {
+      patientData = await this.patientService.findPatientById(params);
       return patientData;
     } else {
-      if (!patientData) {
-        patientData = await this.patientService.findPatientById(idParams);
-        return patientData;
-      } else {
-        const authResponse: AxiosResponse = await this.getToken();
-        if (!authResponse?.data) {
-          throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
-        }
-
-        const token = authResponse?.data?.token;
-        // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-        await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${idParams?.Key?.id}`, {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return patientData;
+      const authResponse: AxiosResponse = await this.getToken();
+      if (!authResponse?.data) {
+        throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
       }
+
+      const token = authResponse?.data?.token;
+      // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
+      await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${params?.Key?.id}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return patientData;
     }
   }
 }

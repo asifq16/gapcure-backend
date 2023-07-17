@@ -31,27 +31,27 @@ class PythoScoreService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from  Pytho score API
    */
-  public async getPythoScore(moke: boolean, identifier: string): Promise<string> {
-    if (moke) {
+  public async getPythoScore(identifier: string, mock = false): Promise<string> {
+    if (mock) {
       const patientData = '25';
       return patientData;
-    } else {
-      const authResponse: AxiosResponse = await this.getToken();
-      if (!authResponse?.data) {
-        throw new HttpException(500, 'Unable to fetch  Pytho score access token');
-      }
-
-      const token = authResponse?.data?.token;
-
-      // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-      return await axios.get(`${PYTHO_SCORE_API_BASE_URL}/${PYTHO_SCORE__PATIENT_API}/${identifier}`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
     }
+
+    const authResponse: AxiosResponse = await this.getToken();
+    if (!authResponse?.data) {
+      throw new HttpException(500, 'Unable to fetch  Pytho score access token');
+    }
+
+    const token = authResponse?.data?.token;
+
+    // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
+    return await axios.get(`${PYTHO_SCORE_API_BASE_URL}/${PYTHO_SCORE__PATIENT_API}/${identifier}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }
 

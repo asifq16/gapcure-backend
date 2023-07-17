@@ -11,18 +11,26 @@ class PatientController {
   public patientService = new patientService();
   public healthGorillaService = new HealthGorillaService();
   public pythoScoreService = new PythoScoreService();
-  public getPythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+
+  public pythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       let score: string;
-      const moke = true;
+      const mock = true;
       const identifier: string = req.body.identifier;
-      const idParams = {
+      const params = {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
         Item: identifier,
       };
-      const patientData = await this.healthGorillaService.getPatientInfo(moke, idParams);
+
+      // Call Patient service check user exist in DB
+      // If not exist then call Health Gorilla Service and insert Patient record in DB
+      // Use Health Gorilla response and call Pytho Score API using Pytho Service
+      // Update Pytho Score in database
+      // Return the Pytho score in response
+
+      const patientData = await this.healthGorillaService.getPatientInfo(params, mock);
       if (patientData) {
-        score = await this.pythoScoreService.getPythoScore(moke, identifier);
+        score = await this.pythoScoreService.getPythoScore(identifier, mock);
         const data: PatientDto = {
           id: `${generateUuid()}`,
           name: patientData.name, // Set the name value
@@ -30,6 +38,7 @@ class PatientController {
           pythoScore: score,
           patientData: patientData,
         };
+
         const params = {
           TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
           Item: data,
