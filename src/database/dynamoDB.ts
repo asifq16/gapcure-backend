@@ -94,15 +94,8 @@ export default class DynamoDB {
   getItemById = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
 
-    const getParams = {
-      TableName: params.TableName,
-      Key: {
-        id: params,
-      },
-    };
-
     try {
-      const result = await dynamodb.get(getParams).promise();
+      const result = await dynamodb.get(params).promise();
       const item = result.Item;
       return item;
     } catch (error) {

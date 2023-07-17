@@ -4,6 +4,7 @@ import patientJson from './mockData/patient.json';
 import { HttpException } from '@/exceptions/HttpException';
 import PatientService from './patient.service';
 import { PatientInfOutput } from '@/interfaces/patient.interface';
+import { PatientByIdParamsDto } from '@/dtos/patient.dto';
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -35,13 +36,13 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from Health Gorilla API
    */
-  public async getPatientInfo(moke: boolean, identifier: string): Promise<PatientInfOutput> {
+  public async getPatientInfo(moke: boolean, idParams: PatientByIdParamsDto): Promise<PatientInfOutput> {
     let patientData: PatientInfOutput = patientJson;
     if (moke) {
       return patientData;
     } else {
       if (!patientData) {
-        patientData = await this.patientService.findPatientById(identifier);
+        patientData = await this.patientService.findPatientById(idParams);
         return patientData;
       } else {
         const authResponse: AxiosResponse = await this.getToken();
@@ -51,7 +52,7 @@ class HealthGorillaService {
 
         const token = authResponse?.data?.token;
         // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-        await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
+        await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${idParams?.Key?.id}`, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

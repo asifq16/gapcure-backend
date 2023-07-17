@@ -16,7 +16,11 @@ class PatientController {
       let score: string;
       const moke = true;
       const identifier: string = req.body.identifier;
-      const patientData = await this.healthGorillaService.getPatientInfo(moke, identifier);
+      const idParams = {
+        TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+        Item: identifier,
+      };
+      const patientData = await this.healthGorillaService.getPatientInfo(moke, idParams);
       if (patientData) {
         score = await this.pythoScoreService.getPythoScore(moke, identifier);
         const data: PatientDto = {
