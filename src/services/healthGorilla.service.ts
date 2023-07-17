@@ -35,27 +35,31 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Axios response received from Health Gorilla API
    */
-  public async getPatientInfo(identifier: string): Promise<PatientInfOutput> {
-    const patientData: PatientInfOutput = patientJson;
-    if (!patientData) {
-      // patientData = await this.patientService.findPatientById(identifier);
+  public async getPatientInfo(moke: boolean, identifier: string): Promise<PatientInfOutput> {
+    let patientData: PatientInfOutput = patientJson;
+    if (moke) {
       return patientData;
     } else {
-      // const authResponse: AxiosResponse = await this.getToken();
-      // if (!authResponse?.data) {
-      //   throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
-      // }
+      if (!patientData) {
+        patientData = await this.patientService.findPatientById(identifier);
+        return patientData;
+      } else {
+        const authResponse: AxiosResponse = await this.getToken();
+        if (!authResponse?.data) {
+          throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
+        }
 
-      // const token = authResponse?.data?.token;
-      // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-      // await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-      return patientData;
+        const token = authResponse?.data?.token;
+        // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
+        await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return patientData;
+      }
     }
   }
 }

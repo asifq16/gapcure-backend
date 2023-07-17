@@ -2,13 +2,13 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import DynamoDB from '@/database/dynamoDB';
 import { PatientByIdParamsDto } from '@/dtos/patient.dto';
-import { PatientInfOutput, PatientUpdateOutPutDto, patientParamsInput } from '@/interfaces/patient.interface';
+import { PatientInfOutput, PatientUpdateOutPut, patientParamsInput } from '@/interfaces/patient.interface';
 
 class PatientService {
   public dynamoDB = new DynamoDB();
 
-  public async findPatientById(patientId: string, params: PatientByIdParamsDto): Promise<PatientUpdateOutPutDto> {
-    if (isEmpty(patientId)) throw new HttpException(400, 'Incorrect patient id');
+  public async findPatientById(params: PatientByIdParamsDto): Promise<PatientUpdateOutPut> {
+    if (isEmpty(params?.Key?.id)) throw new HttpException(400, 'Incorrect patient id');
     const result = await this.dynamoDB.getItemById(params);
     if (result) {
       const patientData: PatientInfOutput = {
@@ -31,14 +31,14 @@ class PatientService {
         link: result.patientData.link,
       };
 
-      const output: PatientUpdateOutPutDto = {
+      const output: PatientUpdateOutPut = {
         patient: patientData,
       };
       return output;
     }
   }
 
-  public async updatePatient(params: patientParamsInput): Promise<PatientUpdateOutPutDto> {
+  public async updatePatient(params: patientParamsInput): Promise<PatientUpdateOutPut> {
     const result = await this.dynamoDB.updateItem(params);
     const patientData: PatientInfOutput = {
       resourceType: result.resourceType,
@@ -60,7 +60,7 @@ class PatientService {
       link: result.patientData.link,
     };
 
-    const output: PatientUpdateOutPutDto = {
+    const output: PatientUpdateOutPut = {
       patient: patientData,
     };
     return output;

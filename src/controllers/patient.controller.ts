@@ -14,10 +14,11 @@ class PatientController {
   public getPythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       let score: string;
+      const moke = true;
       const identifier: string = req.body.identifier;
-      const patientData = await this.healthGorillaService.getPatientInfo(identifier);
+      const patientData = await this.healthGorillaService.getPatientInfo(moke, identifier);
       if (patientData) {
-        score = await this.pythoScoreService.getPythoScore(identifier);
+        score = await this.pythoScoreService.getPythoScore(moke, identifier);
         const data: PatientDto = {
           id: `${generateUuid()}`,
           name: patientData.name, // Set the name value

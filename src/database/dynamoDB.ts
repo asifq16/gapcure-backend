@@ -3,7 +3,7 @@ import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
 import { PatientSchema } from './schema/patient';
 import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
-import { PatientInput, patientParamsInput } from '@/interfaces/patient.interface';
+import { patientParamsInput } from '@/interfaces/patient.interface';
 
 export default class DynamoDB {
   constructor() {
@@ -94,8 +94,15 @@ export default class DynamoDB {
   getItemById = async (params: PatientByIdParamsDto) => {
     const dynamodb = this.getDynamoClientInstance();
 
+    const getParams = {
+      TableName: params.TableName,
+      Key: {
+        id: params,
+      },
+    };
+
     try {
-      const result = await dynamodb.get(params).promise();
+      const result = await dynamodb.get(getParams).promise();
       const item = result.Item;
       return item;
     } catch (error) {

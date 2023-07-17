@@ -32,7 +32,7 @@ export class PatientByIdParamsDto {
   public TableName: string;
 
   @Allow()
-  public Key: object;
+  public Key: Item;
 }
 
 export class PatientQueryParamsDto {

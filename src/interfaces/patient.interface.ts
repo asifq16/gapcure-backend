@@ -1,4 +1,4 @@
-export interface PatientUpdateOutPutDto {
+export interface PatientUpdateOutPut {
   patient: PatientInput;
 }
 
