@@ -3,6 +3,7 @@ import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
 import { PatientSchema } from './schema/patient';
 import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
+import { PatientInput, patientParamsInput } from '@/interfaces/patient.interface';
 
 export default class DynamoDB {
   constructor() {
@@ -79,7 +80,7 @@ export default class DynamoDB {
       const getParams = {
         TableName: params.TableName,
         Key: {
-          uniqueId: params.Item.uniqueId,
+          id: params.Item.id,
         },
       };
       const getResult = await this.getItemById(getParams);
@@ -135,20 +136,18 @@ export default class DynamoDB {
     }
   };
 
-  updateItem = async (params: PatientParamsDto) => {
+  updateItem = async (params: patientParamsInput) => {
     const dynamodb = this.getDynamoClientInstance();
-
+    const Id = params?.Item?.id;
     try {
       await dynamodb.put(params).promise();
       const getParams = {
         TableName: params.TableName,
         Key: {
-          uniqueId: params.Item.uniqueId,
+          id: Id,
         },
       };
-      const getResult = await this.getItemById(getParams);
-      const updatedItem = getResult; // The newly created or updated item
-      return updatedItem;
+      return await this.getItemById(getParams);
     } catch (error) {
       throw error;
     }
