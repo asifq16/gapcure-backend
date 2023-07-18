@@ -1,3 +1,5 @@
+import { PatientDto } from '@/dtos/patient.dto';
+
 export interface PatientUpdateOutPut {
   patient: PatientInput;
 }
@@ -86,7 +88,7 @@ export interface PatientInputParams {
   generalPractitioner: GeneralPractitioner[];
   managingOrganization: ManagingOrganization;
   link: Link[];
-  id: string;
+  id?: string;
 }
 
 export interface PatientInfOutput {
@@ -107,9 +109,28 @@ export interface PatientInfOutput {
   generalPractitioner: GeneralPractitioner[];
   managingOrganization: ManagingOrganization;
   link: Link[];
+  id?: string;
 }
 
 export interface patientParamsInput {
   TableName: string;
-  Item: PatientInputParams;
+  Item: Item;
+}
+
+export interface Item {
+  id?: string;
+  name?: string;
+  identifier?: string;
+  patientData: PatientInputParams;
+  pythoScore: string;
+}
+
+export interface patientUpdateInput {
+  TableName: string;
+  Item: PatientDto;
+}
+
+export interface patientCreateOutput {
+  patientData: PatientInfOutput;
+  id: string;
 }
