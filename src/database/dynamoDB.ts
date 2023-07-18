@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
 import { PatientSchema } from './schema/patient';
-import { AllPatientParamsDto, PatientByIdParamsDto, PatientParamsDto } from '@/dtos/patient.dto';
-import { patientParamsInput } from '@/interfaces/patient.interface';
+import { AllPatientParamsDto, PatientByIdParamsDto, PatientByQueryDto, PatientParamsDto } from '@/dtos/patient.dto';
+import { patientUpdateInput } from '@/interfaces/patient.interface';
 
 export default class DynamoDB {
   constructor() {
@@ -136,7 +136,7 @@ export default class DynamoDB {
     }
   };
 
-  updateItem = async (params: patientParamsInput) => {
+  updateItem = async (params: patientUpdateInput) => {
     const dynamodb = this.getDynamoClientInstance();
     const Id = params?.Item?.id;
     try {
@@ -148,6 +148,18 @@ export default class DynamoDB {
         },
       };
       return await this.getItemById(getParams);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getItemByQuery = async (params: PatientByQueryDto) => {
+    const dynamodb = this.getDynamoClientInstance();
+
+    try {
+      const result = await dynamodb.query(params).promise();
+      const item = result.Items;
+      return item;
     } catch (error) {
       throw error;
     }

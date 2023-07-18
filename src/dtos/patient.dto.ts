@@ -9,17 +9,12 @@ export class AllPatientParamsDto {
   public Item: object;
 }
 
-export class Item {
-  @IsString()
-  public id: string;
-}
-
 export class PatientParamsDto {
   @IsString()
   public TableName: string;
 
   @Allow()
-  public Item: Item;
+  public Item: object;
 }
 
 export class PythoScoreDto {
@@ -32,7 +27,7 @@ export class PatientByIdParamsDto {
   public TableName: string;
 
   @Allow()
-  public Key: Item;
+  public Key: object;
 }
 
 export class PatientQueryParamsDto {
@@ -56,13 +51,13 @@ export class PatientQueryParamsDto {
 
 export class PatientDto {
   @IsString()
-  public id: string;
+  public id?: string;
 
   @IsString()
-  public name: string;
+  public name?: string;
 
   @IsString()
-  public identifier: string;
+  public identifier?: string;
 
   @IsString()
   public pythoScore: string;
@@ -70,4 +65,18 @@ export class PatientDto {
   @Allow()
   @IsOptional()
   public patientData: object;
+}
+
+export class PatientByQueryDto {
+  @IsString()
+  public TableName: string;
+
+  @Allow()
+  public IndexName: string;
+
+  @Allow()
+  public KeyConditionExpression: string;
+
+  @Allow()
+  public ExpressionAttributeValues: { [key: string]: any };
 }
