@@ -27,7 +27,7 @@ const Patient = {
   ],
   GlobalSecondaryIndexes: [
     {
-      IndexName: 'Disease-index',
+      IndexName: 'Identifier-index',
       Projection: {
         ProjectionType: 'ALL',
       },

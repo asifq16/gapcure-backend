@@ -3,5 +3,5 @@ export const DYNAMODB_TABLE_NAMES = {
 };
 
 export const DYNAMODB_TABLE_INDEX = {
-  INDEX: 'Disease-index',
+  PATIENT_IDENTIFIER_INDEX: 'Identifier-index',
 };

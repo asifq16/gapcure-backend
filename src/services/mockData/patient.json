@@ -1,6 +1,6 @@
  {
     "resourceType": "Patient",
-    "identifier": "abc",
+    "identifier": "1a6b9d36-8e60-4648-82c4-030bdf79a391c",
     "active": true,
     "name": "John Doe",
     "telecom": [

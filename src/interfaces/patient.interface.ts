@@ -1,9 +1,3 @@
-import { PatientDto } from '@/dtos/patient.dto';
-
-export interface PatientUpdateOutPut {
-  patient: PatientInput;
-}
-
 interface Telecom {
   phone: string;
 }
@@ -50,49 +44,8 @@ interface Link {
   url: string;
 }
 
-export interface PatientInput {
-  resourceType: string;
-  identifier: string;
-  active: boolean;
-  name: string;
-  telecom: Telecom[];
-  gender: string;
-  birthDate: string;
-  deceasedBoolean: boolean;
-  address: Address[];
-  maritalStatus: string;
-  multipleBirthBoolean: boolean;
-  photo: Photo[];
-  contact: Contact[];
-  communication: Communication[];
-  generalPractitioner: GeneralPractitioner[];
-  managingOrganization: ManagingOrganization;
-  link: Link[];
-}
-
-export interface PatientInputParams {
-  resourceType: string;
-  identifier: string;
-  active: boolean;
-  name: string;
-  telecom: Telecom[];
-  gender: string;
-  birthDate: string;
-  deceasedBoolean: boolean;
-  address: Address[];
-  maritalStatus: string;
-  multipleBirthBoolean: boolean;
-  photo: Photo[];
-  contact: Contact[];
-  communication: Communication[];
-  generalPractitioner: GeneralPractitioner[];
-  managingOrganization: ManagingOrganization;
-  link: Link[];
+export interface Patient {
   id?: string;
-}
-
-export interface PatientInfOutput {
-  resourceType: string;
   identifier: string;
   active: boolean;
   name: string;
@@ -109,28 +62,15 @@ export interface PatientInfOutput {
   generalPractitioner: GeneralPractitioner[];
   managingOrganization: ManagingOrganization;
   link: Link[];
-  id?: string;
+  pythoScore?: string;
 }
 
-export interface patientParamsInput {
+export interface PatientParamsInput {
   TableName: string;
-  Item: Item;
+  Item: Patient;
 }
 
-export interface Item {
-  id?: string;
-  name?: string;
-  identifier?: string;
-  patientData: PatientInputParams;
-  pythoScore: string;
-}
-
-export interface patientUpdateInput {
+export interface PatientUpdateInput {
   TableName: string;
-  Item: PatientDto;
-}
-
-export interface patientCreateOutput {
-  patientData: PatientInfOutput;
-  id: string;
+  Item: Patient;
 }

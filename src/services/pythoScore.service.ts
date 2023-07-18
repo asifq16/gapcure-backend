@@ -8,6 +8,7 @@ class PythoScoreService {
    */
   private async getToken(): Promise<AxiosResponse> {
     try {
+      // TODO: Need to call with correct data
       const payload = {
         grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
         assertion: 'JWT',
@@ -29,12 +30,11 @@ class PythoScoreService {
   /**
    * Function to fetch patient info from Pytho score API
    * @param identifier Patient unique identifier - ssn
-   * @returns Axios response received from  Pytho score API
+   * @returns string
    */
   public async getPythoScore(identifier: string, mock = false): Promise<string> {
     if (mock) {
-      const patientData = '25';
-      return patientData;
+      return '25';
     }
 
     const authResponse: AxiosResponse = await this.getToken();
@@ -44,14 +44,16 @@ class PythoScoreService {
 
     const token = authResponse?.data?.token;
 
-    // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-    return await axios.get(`${PYTHO_SCORE_API_BASE_URL}/${PYTHO_SCORE__PATIENT_API}/${identifier}`, {
+    // TODO: Need to correct the request
+    const response = await axios.get(`${PYTHO_SCORE_API_BASE_URL}/${PYTHO_SCORE__PATIENT_API}/${identifier}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return response?.data?.score || '0';
   }
 }
 
