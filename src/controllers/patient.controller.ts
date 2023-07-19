@@ -104,6 +104,18 @@ class PatientController {
 
           // Insert record in Patients table
           await this.patientService.createPatient(patientData);
+        } else {
+          // Update the user data into the DB
+          const updatePatientParams: PatientUpdateInput = {
+            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+            Item: {
+              ...record,
+              pythoScore: '0',
+            },
+          };
+
+          // Update Pytho Score and user in database
+          await this.patientService.updatePatient(updatePatientParams);
         }
       }
 
