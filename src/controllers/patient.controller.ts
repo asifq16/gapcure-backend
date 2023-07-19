@@ -5,6 +5,7 @@ import { DYNAMODB_TABLE_INDEX, DYNAMODB_TABLE_NAMES } from '@/database/constants
 import { generateUuid } from '@/utils/util';
 import HealthGorillaService from '@/services/healthGorilla.service';
 import PythoScoreService from '@/services/pythoScore.service';
+import jsonArr from '@/services/mockData/excel.json';
 import { Patient, PatientParamsInput, PatientUpdateInput } from '@/interfaces/patient.interface';
 
 class PatientController {
@@ -80,6 +81,33 @@ class PatientController {
         // Return the Pytho score in response
         return res.status(200).json({ data: updatePatientResponse, pythoScore: score });
       }
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getExcelData = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    try {
+      for (const record of jsonArr) {
+        // Call Get Pytho Score API
+        const pythonScore = await this.pythoScoreService.getPythoScore(record.identifier);
+        if (pythonScore) {
+          // Insert the user data into the DB
+          const patientData: PatientParamsInput = {
+            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+            Item: {
+              id: `${generateUuid()}`,
+              ...record,
+              pythoScore: pythonScore,
+            },
+          };
+
+          // Insert record in Patients table
+          await this.patientService.createPatient(patientData);
+        }
+      }
+
+      res.status(200).json({ message: 'Records processed successfully.' });
     } catch (error) {
       next(error);
     }
