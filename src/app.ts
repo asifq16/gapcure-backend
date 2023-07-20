@@ -58,10 +58,6 @@ class App {
       logger.info(`======= ENV: ${this.env} =======`);
       logger.info(`🚀 App listening on the port ${this.port}`);
       logger.info(`=================================`);
-      // cron.scheduleJob('* * * * * *', function () {
-      //   console.log('The answer to life, the universe, and everything!');
-      // });
-      // this.patientController.patientCron();
     });
   }
 
