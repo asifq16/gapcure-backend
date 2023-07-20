@@ -11,7 +11,7 @@ class PatientService {
     const result = await this.dynamoDB.scanItem(params);
 
     if (result) {
-      const patientData: Patient[] = result.map((item: any) => ({
+      const patientData: Patient[] = result.map(item => ({
         id: item.id,
         identifier: item.identifier,
         active: item.active,
