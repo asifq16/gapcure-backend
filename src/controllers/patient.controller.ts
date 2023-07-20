@@ -7,6 +7,7 @@ import HealthGorillaService from '@/services/healthGorilla.service';
 import PythoScoreService from '@/services/pythoScore.service';
 import jsonArr from '@/services/mockData/excel.json';
 import { Patient, PatientParamsInput, PatientUpdateInput } from '@/interfaces/patient.interface';
+import cron from 'node-schedule';
 
 class PatientController {
   public patientService = new patientService();
@@ -89,33 +90,46 @@ class PatientController {
   public getExcelData = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       for (const record of jsonArr) {
-        // Call Get Pytho Score API
-        const pythonScore = await this.pythoScoreService.getPythoScore(record.identifier);
-        if (pythonScore) {
+        const findPatientParams = {
+          TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+          IndexName: DYNAMODB_TABLE_INDEX.PATIENT_IDENTIFIER_INDEX,
+          KeyConditionExpression: 'identifier = :identifier',
+          ExpressionAttributeValues: {
+            ':identifier': record.identifier,
+          },
+        };
+
+        // Check patient in the DynamoDB Database
+        const patient = await this.patientService.findPatientById(findPatientParams);
+
+        if (patient) {
+          // Call Get Pytho Score API
+          const pythoScore = await this.pythoScoreService.getPythoScore(patient.identifier);
+          // Insert the user data into the DB
+          const patientData: PatientParamsInput = {
+            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+            Item: {
+              ...patient,
+              pythoScore: pythoScore ?? '0',
+            },
+          };
+
+          // Insert record in Patients table
+          await this.patientService.updatePatient(patientData);
+        } else {
+          // Call Get Pytho Score API
+          const pythoScore = await this.pythoScoreService.getPythoScore(record.identifier);
           // Insert the user data into the DB
           const patientData: PatientParamsInput = {
             TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
             Item: {
               id: `${generateUuid()}`,
               ...record,
-              pythoScore: pythonScore,
+              pythoScore: pythoScore ?? '0',
             },
           };
 
-          // Insert record in Patients table
           await this.patientService.createPatient(patientData);
-        } else {
-          // Update the user data into the DB
-          const updatePatientParams: PatientUpdateInput = {
-            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-            Item: {
-              ...record,
-              pythoScore: '0',
-            },
-          };
-
-          // Update Pytho Score and user in database
-          await this.patientService.updatePatient(updatePatientParams);
         }
       }
 
@@ -123,6 +137,72 @@ class PatientController {
     } catch (error) {
       next(error);
     }
+  };
+
+  public patientCron = async () => {
+    cron.scheduleJob('0 */12 * * *', async () => {
+      try {
+        const getAllPatientParams = {
+          TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+          Item: {},
+        };
+        // Step 1: Read all the Patients in the database
+        const patients = await this.patientService.getAllPatientData(getAllPatientParams);
+
+        // Step 2: Fetch updated Pytho Score using Pytho Score API for each patient
+        for (const patient of patients) {
+          const pythoScore = await this.pythoScoreService.getPythoScore(patient.identifier);
+
+          // Update the user data into the DB
+          const updatePatientParams: PatientUpdateInput = {
+            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+            Item: {
+              ...patient,
+              pythoScore: pythoScore ?? '0',
+            },
+          };
+
+          // Update Pytho Score and user in database
+          await this.patientService.updatePatient(updatePatientParams);
+        }
+
+        console.log('12-hour cron job executed successfully.');
+      } catch (error) {
+        console.error('An error occurred in the 12-hour cron job:', error);
+      }
+    });
+
+    cron.scheduleJob('0 0 */1 * *', async () => {
+      try {
+        const getAllPatientParams = {
+          TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+          Item: {},
+        };
+        // Step 1: Read all the Patients in the database
+        const patients = await this.patientService.getAllPatientData(getAllPatientParams);
+
+        // Step 2: Fetch updated Pytho Score using Pytho Score API for each patient
+        for (const patient of patients) {
+          const pythoScore = await this.pythoScoreService.getPythoScore(patient.identifier);
+
+          // Update the user data into the DB
+          const updatePatientParams: PatientUpdateInput = {
+            TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+            Item: {
+              ...patient,
+              pythoScore: pythoScore ?? '0',
+            },
+          };
+
+          // Update Pytho Score and user in database
+          await this.patientService.updatePatient(updatePatientParams);
+        }
+
+        console.log('24-hour cron job executed successfully.');
+      } catch (error) {
+        console.error('An error occurred in the 24-hour cron job:', error);
+      }
+    });
   };
 }
 
