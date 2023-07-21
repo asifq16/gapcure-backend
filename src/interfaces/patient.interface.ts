@@ -70,6 +70,11 @@ export interface PatientParamsInput {
   Item: Patient;
 }
 
+export interface GetAllPatientParamsInput {
+  TableName: string;
+  Item: {};
+}
+
 export interface PatientUpdateInput {
   TableName: string;
   Item: Patient;

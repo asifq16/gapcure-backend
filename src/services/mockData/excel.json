@@ -1,0 +1,154 @@
+[
+    {
+        "resourceType": "Patient",
+        "identifier": "11111",
+        "active": true,
+        "name": "John Doe",
+        "telecom": [
+          {
+            "phone": "123-456-7890"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1990-01-01",
+        "deceasedBoolean": false,
+        "address": [
+          {
+            "country": "United States",
+            "state": "California",
+            "city": "Los Angeles",
+            "locality": "Downtown"
+          }
+        ],
+        "maritalStatus": "single",
+        "multipleBirthBoolean": false,
+        "photo": [
+          {
+            "file_url": "https://example.com/photo1.jpg"
+          }
+        ],
+        "contact": [
+          {
+            "relationship": "parent",
+            "name": "Jane Smith",
+            "telecom": [
+              {
+                "phone": "555-123-4567"
+              }
+            ],
+            "address": {
+              "country": "United States",
+              "state": "California",
+              "city": "San Francisco",
+              "locality": "Downtown"
+            },
+            "gender": "female",
+            "organization": "XYZ Hospital",
+            "period": {
+              "time": "2022-01-01T08:00:00Z"
+            }
+          }
+        ],
+        "communication": [
+          {
+            "language": "English",
+            "preferred": true
+          },
+          {
+            "language": "Spanish",
+            "preferred": false
+          }
+        ],
+        "generalPractitioner": [
+          {
+            "name": "Dr. Smith",
+            "contact_number": "555-987-6543"
+          }
+        ],
+        "managingOrganization": {
+          "name": "ABC Hospital",
+          "contact_number": "555-123-4567"
+        },
+        "link": [
+            {
+                "url": "https://example.com/photo1.jpg"
+              }
+        ]
+      },
+      {
+        "resourceType": "Patient",
+        "identifier": "123456",
+        "active": true,
+        "name": "John ",
+        "telecom": [
+          {
+            "phone": "123-456-7890"
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1990-01-01",
+        "deceasedBoolean": false,
+        "address": [
+          {
+            "country": "United States",
+            "state": "California",
+            "city": "Los Angeles",
+            "locality": "Downtown"
+          }
+        ],
+        "maritalStatus": "single",
+        "multipleBirthBoolean": false,
+        "photo": [
+          {
+            "file_url": "https://example.com/photo1.jpg"
+          }
+        ],
+        "contact": [
+          {
+            "relationship": "parent",
+            "name": "Jane Smith",
+            "telecom": [
+              {
+                "phone": "555-123-4567"
+              }
+            ],
+            "address": {
+              "country": "United States",
+              "state": "California",
+              "city": "San Francisco",
+              "locality": "Downtown"
+            },
+            "gender": "female",
+            "organization": "XYZ Hospital",
+            "period": {
+              "time": "2022-01-01T08:00:00Z"
+            }
+          }
+        ],
+        "communication": [
+          {
+            "language": "English",
+            "preferred": true
+          },
+          {
+            "language": "Spanish",
+            "preferred": false
+          }
+        ],
+        "generalPractitioner": [
+          {
+            "name": "Dr. Smith",
+            "contact_number": "555-987-6543"
+          }
+        ],
+        "managingOrganization": {
+          "name": "ABC Hospital",
+          "contact_number": "555-123-4567"
+        },
+        "link": [
+            {
+                "url": "https://example.com/photo1.jpg"
+              }
+        ]
+      }
+   ]

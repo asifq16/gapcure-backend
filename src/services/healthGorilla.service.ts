@@ -53,7 +53,7 @@ class HealthGorillaService {
     const token = authResponse?.data?.token;
     // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
     // TODO: Need to handle the API response
-    await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${params}`, {
+    await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

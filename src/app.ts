@@ -10,12 +10,15 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import DynamoDB from './database/dynamoDB';
+import cron from 'node-schedule';
+import PatientController from './controllers/patient.controller';
 
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
   public dynamoDB = new DynamoDB();
+  public patientController = new PatientController();
 
   public corsOptions: any = {
     origin: function (origin, callback) {
