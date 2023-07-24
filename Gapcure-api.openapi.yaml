@@ -15,15 +15,15 @@ paths:
     post:
       tags:
         - Patient
-      summary: PostPatient
+      summary: GetPythoScore
       requestBody:
-        description: PostPatient Payload
+        description: GetPythoScore Payload
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Patient'
-      description: Post Patient API.
-      operationId: PostPatient
+      description: Post GetPythoScore API.
+      operationId: GetPythoScore
       responses:
         '201':
           description: Created
@@ -51,9 +51,11 @@ paths:
     get:
       tags:
         - Patient
-      summary: GetPatient
-      description: Get Patient API.
-      operationId: GetPatient
+      paths:
+       /patient/get-excel-data:   
+      summary: getExcelData
+      description: Get getExcelData API.
+      operationId: getExcelData
       responses:
         '200':
           description: OK
@@ -78,6 +80,7 @@ paths:
           description: Internal Server Error
           content:
             application/vnd.collection+json: {}
+            
   /patient/{id}:
     get:
       tags:
@@ -158,22 +161,88 @@ components:
     Patient:
       type: object
       required:
-        - uniqueId
+        - id
+        - identifier
+        - active
+        - gender
         - name
+        - birthDate  
         - address
+        - deceasedBoolean
+        - maritalStatus
+        - multipleBirthBoolean
+        - photo 
+        - contact
+        - communication
+        - generalPractitioner 
+        - managingOrganization
+        - link
+        - pythoScore      
       properties:
-        uniqueId:
+        id:
           type: string
           minLength: 24
           maxLength: 24
-        name:
+        identifier:
           type: string
           minLength: 1
           maxLength: 100
-        address:
+        name:
           type: string
           minLength: 1
           maxLength: 200
+        active:
+          type: boolean
+          minLength: 1
+          maxLength: 200  
+        gender:
+          type: string
+          minLength: 1
+          maxLength: 200  
+        birthDate:
+          type: string
+          minLength: 1
+          maxLength: 200  
+        address:
+          type: array
+          minLength: 1
+          maxLength: 200 
+        deceasedBoolean:
+          type: boolean
+          minLength: 24
+          maxLength: 24
+        maritalStatus:
+          type: string
+          minLength: 1
+          maxLength: 100
+        multipleBirthBoolean:
+          type: boolean
+          minLength: 1
+          maxLength: 200
+        contact:
+          type: array
+          minLength: 1
+          maxLength: 200  
+        communication:
+          type: array
+          minLength: 1
+          maxLength: 200  
+        generalPractitioner:
+          type: array
+          minLength: 1
+          maxLength: 200  
+        managingOrganization:
+          type: array
+          minLength: 1
+          maxLength: 200
+        link:
+          type: array
+          minLength: 1
+          maxLength: 200  
+        pythoScore:
+          type: string
+          minLength: 1
+          maxLength: 200                         
     PatientPostResponseModel:
       type: 'object'
       properties:
@@ -185,17 +254,38 @@ components:
               properties:
                 id:
                   type: string
-                uniqueId:
+                identifier:
                   type: string
+                active:
+                  type: boolean
                 name:
                   type: string
-                metaData:
-                  type: object
-                  properties:
-                    yesCount:
-                      type: number
-                    noCount:
-                      type: number
+                gender:
+                  type: string
+                birthDate:
+                  type: string
+                deceasedBoolean:
+                  type: boolean
+                address:
+                  type: array
+                maritalStatus:
+                  type: string
+                multipleBirthBoolean:
+                  type: boolean  
+                photo:
+                  type: array
+                contact:
+                  type: array
+                communication:
+                  type: array
+                generalPractitioner:
+                  type: array
+                managingOrganization:
+                  type: array  
+                link:
+                  type: array 
+                pythoScore:
+                  type: string                   
     PatientGetResponseModel:
       type: 'object'
       properties:
@@ -204,19 +294,40 @@ components:
           items:
             type: object
             properties:
-              id:
-                type: string
-              uniqueId:
-                type: string
-              name:
-                type: string
-              metaData:
-                type: object
-                properties:
-                  yesCount:
-                    type: number
-                  noCount:
-                    type: number
+                id:
+                  type: string
+                identifier:
+                  type: string
+                active:
+                  type: boolean
+                name:
+                  type: string
+                gender:
+                  type: string
+                birthDate:
+                  type: string
+                deceasedBoolean:
+                  type: boolean
+                address:
+                  type: array
+                maritalStatus:
+                  type: string
+                multipleBirthBoolean:
+                  type: boolean  
+                photo:
+                  type: array
+                contact:
+                  type: array
+                communication:
+                  type: array
+                generalPractitioner:
+                  type: array
+                managingOrganization:
+                  type: array  
+                link:
+                  type: array 
+                pythoScore:
+                  type: string  
     PatientDetailResponseModel:
       type: 'object'
       properties:
@@ -228,17 +339,38 @@ components:
               properties:
                 id:
                   type: string
-                uniqueId:
+                identifier:
                   type: string
+                active:
+                  type: boolean
                 name:
                   type: string
-                metaData:
-                  type: object
-                  properties:
-                    yesCount:
-                      type: number
-                    noCount:
-                      type: number
+                gender:
+                  type: string
+                birthDate:
+                  type: string
+                deceasedBoolean:
+                  type: boolean
+                address:
+                  type: array
+                maritalStatus:
+                  type: string
+                multipleBirthBoolean:
+                  type: boolean  
+                photo:
+                  type: array
+                contact:
+                  type: array
+                communication:
+                  type: array
+                generalPractitioner:
+                  type: array
+                managingOrganization:
+                  type: array  
+                link:
+                  type: array 
+                pythoScore:
+                  type: string  
     CommonErrorResponseModel:
       type: 'object'
       title: 'ErrorSchema'
