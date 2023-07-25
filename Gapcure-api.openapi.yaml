@@ -49,13 +49,13 @@ paths:
           content:
             application/vnd.collection+json: {}
             
-  /patient/getExcelData:          
+  /patient/importData:          
     get:
       tags:
-        - Patient
-      summary: Get Excel-Data
-      description: Get Excel-Data API.
-      operationId: Get Excel-Data
+        - Patient 
+      summary: Import Patient-Data
+      description: Import-Data API.
+      operationId: Import-Data
       responses:
         '200':
           description: OK
