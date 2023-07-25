@@ -15,15 +15,15 @@ paths:
     post:
       tags:
         - Patient
-      summary: GetPythoScore
+      summary: PythoScore
       requestBody:
-        description: GetPythoScore Payload
+        description: PythoScore Payload
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Patient'
-      description: Post GetPythoScore API.
-      operationId: GetPythoScore
+      description: Post PythoScore API.
+      operationId: PythoScore
       responses:
         '201':
           description: Created
