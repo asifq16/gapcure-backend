@@ -10,7 +10,6 @@ import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import DynamoDB from './database/dynamoDB';
-import cron from 'node-schedule';
 import PatientController from './controllers/patient.controller';
 
 class App {
