@@ -1,6 +1,4 @@
-import { hash } from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -19,10 +17,6 @@ export const isEmpty = (value: string | number | object): boolean => {
   } else {
     return false;
   }
-};
-
-export const createHashPassword = async (password: string): Promise<string> => {
-  return await hash(password, 10);
 };
 
 export const generateUuid = (): Promise<string> => {
