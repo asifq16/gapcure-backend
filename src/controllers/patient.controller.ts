@@ -87,7 +87,7 @@ class PatientController {
     }
   };
 
-  public getExcelData = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+  public importData = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       for (const record of jsonArr) {
         const findPatientParams = {

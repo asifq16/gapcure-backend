@@ -67,7 +67,7 @@ class PatientService {
   }
 
   public async findPatientById(params: PatientByQueryDto): Promise<Patient> {
-    if (isEmpty(params)) throw new HttpException(400, 'Incorrect patient id');
+    if (isEmpty(params.KeyConditionExpression)) throw new HttpException(400, 'Incorrect patient identifier');
 
     const result = await this.dynamoDB.getItemByQuery(params);
 
