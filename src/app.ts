@@ -5,19 +5,19 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS, ENABLE_CRON } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
 import DynamoDB from './database/dynamoDB';
-import PatientController from './controllers/patient.controller';
+import RefreshPythoScore from './schedulers/refresh-pytho-score';
 
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
   public dynamoDB = new DynamoDB();
-  public patientController = new PatientController();
+  public refreshPythoScoreCron = new RefreshPythoScore();
 
   public corsOptions: any = {
     origin: function (origin, callback) {
@@ -49,6 +49,11 @@ class App {
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeErrorHandling();
+
+    // Initialize cron jobs
+    if (ENABLE_CRON === 'true') {
+      this.refreshPythoScoreCron.startCron();
+    }
   }
 
   public listen() {

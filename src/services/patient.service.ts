@@ -2,40 +2,10 @@ import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import DynamoDB from '@/database/dynamoDB';
 import { PatientByQueryDto } from '@/dtos/patient.dto';
-import { PatientParamsInput, PatientUpdateInput, Patient, GetAllPatientParamsInput } from '@/interfaces/patient.interface';
+import { PatientParamsInput, PatientUpdateInput, Patient } from '@/interfaces/patient.interface';
 
 class PatientService {
   public dynamoDB = new DynamoDB();
-
-  public async getAllPatientData(params: GetAllPatientParamsInput): Promise<Patient[]> {
-    const result = await this.dynamoDB.scanItem(params);
-
-    if (result) {
-      const patientData: Patient[] = result.map(item => ({
-        id: item.id,
-        identifier: item.identifier,
-        active: item.active,
-        name: item.name,
-        telecom: item.telecom,
-        gender: item.gender,
-        birthDate: item.birthDate,
-        deceasedBoolean: item.deceasedBoolean,
-        address: item.address,
-        maritalStatus: item.maritalStatus,
-        multipleBirthBoolean: item.multipleBirthBoolean,
-        photo: item.photo,
-        contact: item.contact,
-        communication: item.communication,
-        generalPractitioner: item.generalPractitioner,
-        managingOrganization: item.managingOrganization,
-        link: item.link,
-      }));
-
-      return patientData;
-    }
-
-    return [];
-  }
 
   public async createPatient(params: PatientParamsInput): Promise<Patient> {
     const result = await this.dynamoDB.createItem(params);
@@ -67,7 +37,7 @@ class PatientService {
   }
 
   public async findPatientById(params: PatientByQueryDto): Promise<Patient> {
-    if (isEmpty(params.KeyConditionExpression)) throw new HttpException(400, 'Incorrect patient identifier');
+    if (isEmpty(params?.KeyConditionExpression)) throw new HttpException(400, 'Incorrect patient identifier');
 
     const result = await this.dynamoDB.getItemByQuery(params);
 
@@ -126,6 +96,36 @@ class PatientService {
       return patientData;
     }
     return null;
+  }
+
+  public async getAllPatientData(params: PatientParamsInput): Promise<Patient[]> {
+    const result = await this.dynamoDB.scanItem(params);
+
+    if (result) {
+      const patientData: Patient[] = result.map(item => ({
+        id: item.id,
+        identifier: item.identifier,
+        active: item.active,
+        name: item.name,
+        telecom: item.telecom,
+        gender: item.gender,
+        birthDate: item.birthDate,
+        deceasedBoolean: item.deceasedBoolean,
+        address: item.address,
+        maritalStatus: item.maritalStatus,
+        multipleBirthBoolean: item.multipleBirthBoolean,
+        photo: item.photo,
+        contact: item.contact,
+        communication: item.communication,
+        generalPractitioner: item.generalPractitioner,
+        managingOrganization: item.managingOrganization,
+        link: item.link,
+      }));
+
+      return patientData;
+    }
+
+    return [];
   }
 }
 

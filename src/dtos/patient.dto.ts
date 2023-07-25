@@ -9,12 +9,17 @@ export class AllPatientParamsDto {
   public Item: object;
 }
 
+class Item {
+  @IsString()
+  public id?: string;
+}
+
 export class PatientParamsDto {
   @IsString()
   public TableName: string;
 
   @Allow()
-  public Item: object;
+  public Item: Item;
 }
 
 export class PythoScoreDto {

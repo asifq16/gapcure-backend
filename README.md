@@ -1,12 +1,12 @@
-# GapCure-backend
+# Pyhto Score API
 
-GapCure NodeJs Express backend
+Pyhto Score API NodeJs Express backend
 
-# Configure and ise in local
+# Configure and use in local
 
 Step-1:
 
-Clone <b>gapcure-backend</b> repository
+Clone <b>Pyhto-Score-API</b> repository
 
 Step-2:
 

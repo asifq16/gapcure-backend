@@ -15,16 +15,16 @@
 # make push ENV=prod
 
 DOCKER_ID = 062140049361.dkr.ecr.ap-south-1.amazonaws.com
-APP_NAME = gapcure-backend:1.0.0
+APP_NAME = pyhto-score-api:1.0.0
 
 ifeq ($(ENV),prod)
 	DOCKER_ID := 062140049361.dkr.ecr.ap-south-1.amazonaws.com
-	APP_NAME = gapcure-backend:1.0.0
+	APP_NAME = pyhto-score-api:1.0.0
 endif
 
 ifeq ($(ENV),dev)
 	DOCKER_ID := 062140049361.dkr.ecr.ap-south-1.amazonaws.com
-	APP_NAME = gapcure-backend:1.0.0
+	APP_NAME = pyhto-score-api:1.0.0
 endif
 
 .PHONY: build

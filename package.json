@@ -1,7 +1,7 @@
 {
-  "name": "gapcure-backend",
+  "name": "pyhto-score-api",
   "version": "1.0.0",
-  "description": "Gapcure Backend",
+  "description": "Pyhto Score API",
   "author": "",
   "license": "ISC",
   "engines": {
