@@ -48,14 +48,14 @@ paths:
           description: Internal Server Error
           content:
             application/vnd.collection+json: {}
+            
+  /patient/getExcelData:          
     get:
       tags:
         - Patient
-      paths:
-       /patient/get-excel-data:   
-      summary: getExcelData
-      description: Get getExcelData API.
-      operationId: getExcelData
+      summary: Get Excel-Data
+      description: Get Excel-Data API.
+      operationId: Get Excel-Data
       responses:
         '200':
           description: OK
@@ -177,7 +177,6 @@ components:
         - generalPractitioner 
         - managingOrganization
         - link
-        - pythoScore      
       properties:
         id:
           type: string
@@ -186,63 +185,121 @@ components:
         identifier:
           type: string
           minLength: 1
-          maxLength: 100
-        name:
-          type: string
-          minLength: 1
-          maxLength: 200
-        active:
-          type: boolean
-          minLength: 1
-          maxLength: 200  
-        gender:
-          type: string
-          minLength: 1
-          maxLength: 200  
-        birthDate:
-          type: string
-          minLength: 1
-          maxLength: 200  
+          maxLength: 25
         address:
           type: array
-          minLength: 1
-          maxLength: 200 
-        deceasedBoolean:
-          type: boolean
-          minLength: 24
-          maxLength: 24
-        maritalStatus:
-          type: string
-          minLength: 1
-          maxLength: 100
-        multipleBirthBoolean:
-          type: boolean
-          minLength: 1
-          maxLength: 200
+          items:
+            type: object    # Define the schema for the array elements
+            properties:
+              country:
+                type: string
+                minLength: 1
+                maxLength: 15
+              state:
+                type: string
+                minLength: 1
+                maxLength: 15
+              city:
+                type: string
+                minLength: 1
+                maxLength: 12
+              locality:
+                type: string
+                minLength: 1
+                maxLength: 20
+        # Other properties...
         contact:
           type: array
-          minLength: 1
-          maxLength: 200  
+          items:
+            type: object    # Define the schema for the array elements
+            properties:
+              relationship:
+                type: string
+                minLength: 1
+                maxLength: 12
+              name:
+                type: string
+                minLength: 1
+                maxLength: 15
+              telecom:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    phone:
+                      type: string
+                      minLength: 1
+                      maxLength: 14
+              address:
+                type: object
+                properties:
+                  country:
+                    type: string
+                  state:
+                    type: string
+                  city:
+                    type: string
+                  locality:
+                    type: string
+              gender:
+                type: string
+              organization:
+                type: string
+              period:
+                type: object
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+        # Other properties...
         communication:
           type: array
-          minLength: 1
-          maxLength: 200  
+          items:
+            type: object    # Define the schema for the array elements
+            properties:
+              language:
+                type: string
+              preferred:
+                type: boolean
+        # Other properties...
         generalPractitioner:
           type: array
-          minLength: 1
-          maxLength: 200  
+          items:
+            type: object    # Define the schema for the array elements
+            properties:
+              name:
+                type: string
+                minLength: 1
+                maxLength: 20
+              contact_number:
+                type: string
+                minLength: 1
+                maxLength: 14
+        # Other properties...
         managingOrganization:
-          type: array
-          minLength: 1
-          maxLength: 200
+          type: object
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 14
+            contact_number:
+              type: string
+              minLength: 1
+              maxLength: 14
+        # Other properties...
         link:
           type: array
-          minLength: 1
-          maxLength: 200  
+          items:
+            type: object    # Define the schema for the array elements
+            properties:
+              url:
+                type: string
+        # Other properties...
         pythoScore:
           type: string
           minLength: 1
-          maxLength: 200                         
+          maxLength: 25                    
     PatientPostResponseModel:
       type: 'object'
       properties:
@@ -268,24 +325,39 @@ components:
                   type: boolean
                 address:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 maritalStatus:
                   type: string
                 multipleBirthBoolean:
-                  type: boolean  
+                  type: boolean
                 photo:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 contact:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 communication:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 generalPractitioner:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 managingOrganization:
-                  type: array  
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
                 link:
-                  type: array 
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
                 pythoScore:
-                  type: string                   
+                  type: string
+
     PatientGetResponseModel:
       type: 'object'
       properties:
@@ -294,40 +366,55 @@ components:
           items:
             type: object
             properties:
-                id:
-                  type: string
-                identifier:
-                  type: string
-                active:
-                  type: boolean
-                name:
-                  type: string
-                gender:
-                  type: string
-                birthDate:
-                  type: string
-                deceasedBoolean:
-                  type: boolean
-                address:
-                  type: array
-                maritalStatus:
-                  type: string
-                multipleBirthBoolean:
-                  type: boolean  
-                photo:
-                  type: array
-                contact:
-                  type: array
-                communication:
-                  type: array
-                generalPractitioner:
-                  type: array
-                managingOrganization:
-                  type: array  
-                link:
-                  type: array 
-                pythoScore:
-                  type: string  
+              id:
+                type: string
+              identifier:
+                type: string
+              active:
+                type: boolean
+              name:
+                type: string
+              gender:
+                type: string
+              birthDate:
+                type: string
+              deceasedBoolean:
+                type: boolean
+              address:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              maritalStatus:
+                type: string
+              multipleBirthBoolean:
+                type: boolean
+              photo:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              contact:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              communication:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              generalPractitioner:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              managingOrganization:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              link:
+                type: array
+                items: # Specify the items field for array
+                  type: object
+              pythoScore:
+                type: string
+
     PatientDetailResponseModel:
       type: 'object'
       properties:
@@ -353,24 +440,38 @@ components:
                   type: boolean
                 address:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 maritalStatus:
                   type: string
                 multipleBirthBoolean:
-                  type: boolean  
+                  type: boolean
                 photo:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 contact:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 communication:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 generalPractitioner:
                   type: array
+                  items: # Specify the items field for array
+                    type: object
                 managingOrganization:
-                  type: array  
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
                 link:
-                  type: array 
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
                 pythoScore:
-                  type: string  
+                  type: string
     CommonErrorResponseModel:
       type: 'object'
       title: 'ErrorSchema'
