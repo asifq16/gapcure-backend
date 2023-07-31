@@ -11,43 +11,6 @@ tags:
   - name: Patient
     description: Patient API
 paths:
-  /patient:
-    post:
-      tags:
-        - Patient
-      summary: PostPatient
-      requestBody:
-        description: PostPatient Payload
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
-      description: Post Patient API.
-      operationId: PostPatient
-      responses:
-        '201':
-          description: Created
-          content:
-            application/vnd.collection+json:
-              schema:
-                $ref: '#/components/schemas/PatientPostResponseModel'
-        '401':
-          description: '401 response: Unauthorized Request'
-          content:
-            application/vnd.collection+json:
-              schema:
-                $ref: '#/components/schemas/CommonErrorResponseModel'
-
-        '404':
-          description: '404 response: No Data Found'
-          content:
-            application/vnd.collection+json:
-              schema:
-                $ref: '#/components/schemas/CommonErrorResponseModel'
-        '500':
-          description: Internal Server Error
-          content:
-            application/vnd.collection+json: {}
   /patient/pytho-score:
     post:
       tags:
@@ -91,134 +54,12 @@ components:
     Patient:
       type: object
       required:
-        - id
         - identifier
-        - active
-        - gender
-        - name
-        - birthDate  
-        - address
-        - deceasedBoolean
-        - maritalStatus
-        - multipleBirthBoolean
-        - contact
       properties:
-        id:
-          type: string
-          minLength: 24
-          maxLength: 24
         identifier:
           type: string
           minLength: 1
-          maxLength: 25
-        address:
-          type: array
-          items:
-            type: object
-            properties:
-              country:
-                type: string
-                minLength: 1
-                maxLength: 15
-              state:
-                type: string
-                minLength: 1
-                maxLength: 15
-              city:
-                type: string
-                minLength: 1
-                maxLength: 12
-              locality:
-                type: string
-                minLength: 1
-                maxLength: 20
-        contact:
-          type: array
-          items:
-            type: object
-            properties:
-              relationship:
-                type: string
-                minLength: 1
-                maxLength: 20
-              name:
-                type: string
-                minLength: 1
-                maxLength: 50
-              telecom:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    phone:
-                      type: string
-                      minLength: 1
-                      maxLength: 15
-              address:
-                type: object
-                properties:
-                  country:
-                    type: string
-                  state:
-                    type: string
-                  city:
-                    type: string
-                  locality:
-                    type: string
-              gender:
-                type: string
-              organization:
-                type: string
-              period:
-                type: object
-                properties:
-                  time:
-                    type: string
-                    format: date-time
-        communication:
-          type: array
-          items:
-            type: object
-            properties:
-              language:
-                type: string
-              preferred:
-                type: boolean
-        generalPractitioner:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 1
-                maxLength: 20
-              contact_number:
-                type: string
-                minLength: 1
-                maxLength: 14
-        managingOrganization:
-          type: object
-          properties:
-            name:
-              type: string
-              minLength: 1
-              maxLength: 14
-            contact_number:
-              type: string
-              minLength: 1
-              maxLength: 14
-        link:
-          type: array
-          items:
-            type: object
-            properties:
-              url:
-                type: string
-        pythoScore:
-          type: string
-          minLength: 1
-          maxLength: 25                    
+          maxLength: 25            
     PatientPostResponseModel:
       type: 'object'
       properties:
