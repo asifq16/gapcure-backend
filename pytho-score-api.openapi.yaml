@@ -10,18 +10,19 @@ servers:
 tags:  
   - name: Patient
     description: Patient API
+
 paths:
   /patient/pytho-score:
     post:
       tags:
-        - PythoScore
+        - Patient
       summary: Post PythoScore
       requestBody:
         description: Post PythoScore Payload
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patient'
+              $ref: '#/components/schemas/PostPythoScorePayload'
       description: Post PythoScore API.
       operationId: PostPythoScore
       responses:
@@ -30,7 +31,7 @@ paths:
           content:
             application/vnd.collection+json:
               schema:
-                $ref: '#/components/schemas/PatientPostResponseModel'
+                $ref: '#/components/schemas/PostPythoScoreResponse'
         '401':
           description: '401 response: Unauthorized Request'
           content:
@@ -51,7 +52,7 @@ paths:
             
 components:
   schemas:
-    Patient:
+    PostPythoScorePayload:
       type: object
       required:
         - identifier
@@ -60,7 +61,7 @@ components:
           type: string
           minLength: 1
           maxLength: 25            
-    PatientPostResponseModel:
+    PostPythoScoreResponse:
       type: 'object'
       properties:
         data:
