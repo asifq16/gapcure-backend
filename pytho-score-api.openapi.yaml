@@ -5,8 +5,8 @@ info:
   version: '1.0'
 servers:
   # Servers
-  - url: http://20.204.216.242
-  - url: https://20.204.216.242
+  - url: http://34.200.236.229:8081/
+  - url: http://34.200.236.229:8081/
 tags:  
   - name: Patient
     description: Patient API
