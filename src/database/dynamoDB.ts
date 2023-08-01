@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
+import { PatientSchema } from './schema/patient';
 import { AllPatientParamsDto, PatientByIdParamsDto, PatientByQueryDto, PatientParamsDto } from '@/dtos/patient.dto';
 import { PatientUpdateInput } from '@/interfaces/patient.interface';
 
@@ -35,8 +36,21 @@ export default class DynamoDB {
         console.log('Available tables:', data.TableNames);
 
         if (DB_SYNC === 'true') {
+          // this.createTable();
           // this.deleteTable();
         }
+      }
+    });
+  }
+
+  createTable() {
+    const dynamodb = this.getDynamodbInstance();
+
+    dynamodb.createTable(PatientSchema, function (err, data) {
+      if (err) {
+        console.log('Error - createTable', err);
+      } else {
+        console.log('Table Created', data);
       }
     });
   }
