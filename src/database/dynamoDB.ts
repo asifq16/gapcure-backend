@@ -1,7 +1,6 @@
 import AWS from 'aws-sdk';
 import { ACCESS_KEY, SECRET_KEY, REGION, DB_SYNC } from '@config';
 import { DYNAMODB_TABLE_NAMES } from './constants';
-import { PatientSchema } from './schema/patient';
 import { AllPatientParamsDto, PatientByIdParamsDto, PatientByQueryDto, PatientParamsDto } from '@/dtos/patient.dto';
 import { PatientUpdateInput } from '@/interfaces/patient.interface';
 
