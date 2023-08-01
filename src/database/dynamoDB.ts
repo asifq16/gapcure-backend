@@ -36,21 +36,8 @@ export default class DynamoDB {
         console.log('Available tables:', data.TableNames);
 
         if (DB_SYNC === 'true') {
-          // this.createTable();
           // this.deleteTable();
         }
-      }
-    });
-  }
-
-  createTable() {
-    const dynamodb = this.getDynamodbInstance();
-
-    dynamodb.createTable(PatientSchema, function (err, data) {
-      if (err) {
-        console.log('Error - createTable', err);
-      } else {
-        console.log('Table Created', data);
       }
     });
   }
