@@ -36,6 +36,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "node-schedule": "^2.1.1",
+    "qs": "^6.11.2",
     "uuid": "^9.0.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"

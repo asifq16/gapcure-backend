@@ -16,7 +16,7 @@ class PatientController {
   public pythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       const identifier: string = req.body.identifier;
-      const mock = true;
+      const mock = false;
       let score: string;
       let createPatientResponse: Patient;
 

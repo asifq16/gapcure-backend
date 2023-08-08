@@ -44,23 +44,55 @@ Production
 yarn dev
 yarn start:prod
 ```
+# AWS Configuration and running Terraform Script Steps
 
-# TerraForm Configuration  and use
+Before running Terraform, you need to configure your AWS credentials to enable Terraform to access your AWS resources. Follow the steps below to set up the AWS CLI with your credentials:
 
-# Install 
-https://developer.hashicorp.com/terraform/downloads  Follow the link and download/install terraform in the system.
+# AWS Configuration
 
-# use
-There are 2 way to run terraform folder 1. Individually run folder  2. Run all the folders .
+Step 1: Open the terminal and check AWS CLI configuration by running the following command:
 
-1. Individually run folder
- go to terraform module directory like for run table module :
-  go to => terraform-deploy/module/table
-  than run command => terraform init 
-  than run command = > terraform apply
+```
+aws configure
+```
 
-2. Run all the folders
- go to terraform- deploy folder :
-  go to => terraform-deploy
-  than run command => terraform init 
-  than run command = > terraform apply  
+Step 2: Follow the prompts in the terminal and provide your AWS account's Access Key, Secret Key, and your preferred AWS Region.
+
+These steps will configure your AWS CLI with the necessary credentials and default region, allowing you to access AWS services from the command line.
+
+
+# Terraform Configuration and Usage
+Step 1:
+
+Install Terraform
+Download and install Terraform from the official website: https://www.terraform.io/downloads.html
+
+Step 2:
+
+# Check Terraform Version
+Ensure Terraform is installed by running the following command in the terminal:
+
+```
+terraform --version
+```
+# Using Terraform
+1. Individually Run Modules
+To run a specific module, navigate to its directory and execute the following commands:
+
+```
+cd terraform-deploy/module/table
+terraform init
+terraform apply
+
+```
+2. Run All Modules
+To run all modules together, navigate to the main directory and execute the following commands:
+
+```
+cd terraform-deploy
+terraform init
+terraform apply
+```
+
+
+

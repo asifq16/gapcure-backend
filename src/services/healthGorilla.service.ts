@@ -1,9 +1,12 @@
-import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API } from '@/utils/constants';
+import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API, LOOKUP_END_POINT } from '@/utils/constants';
 import axios, { AxiosResponse } from 'axios';
 import patientMockData from './mockData/patient.json';
 import { HttpException } from '@/exceptions/HttpException';
 import PatientService from './patient.service';
 import { Patient } from '@/interfaces/patient.interface';
+import qs from 'qs';
+import { ASSERTION, GRANT_TYPE, SCOPE } from '@/config';
+import { CLIENT_RENEG_WINDOW } from 'tls';
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -13,22 +16,25 @@ class HealthGorillaService {
    */
   private async getToken(): Promise<AxiosResponse> {
     try {
-      // TODO: Need to call with correct data
-      const payload = {
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion: 'JWT',
-        client_id: '',
-        scope: 'user/*.*',
+      const data = qs.stringify({
+        grant_type: GRANT_TYPE,
+        client_id: CLIENT_RENEG_WINDOW,
+        assertion: ASSERTION,
+        scope: SCOPE,
+      });
+
+      const config = {
+        method: 'post',
+        url: `${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_AUTH_API}`,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: data,
       };
 
-      return await axios.post(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_AUTH_API}`, payload, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      return await axios(config);
     } catch (error) {
-      console.log('Error getToken', error);
+      throw error;
     }
   }
 
@@ -37,7 +43,7 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Patient
    */
-  public async getPatientInfo(identifier: string, mock = true): Promise<Patient> {
+  public async getPatientInfo(identifier: string, mock = false): Promise<Patient> {
     let patientData: Patient;
 
     if (mock) {
@@ -50,16 +56,25 @@ class HealthGorillaService {
       throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
     }
 
-    const token = authResponse?.data?.token;
+    const token = authResponse?.data?.access_token;
     // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
     // TODO: Need to handle the API response
-    await axios.get(`${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}`, {
+
+    const config = {
+      method: 'get',
+      url: `${HEALTH_GORILLA_BASE_URL}${HEALTH_GORILLA_PATIENT_API}/${identifier}${LOOKUP_END_POINT}`,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    });
+    };
+
+    patientData = await axios(config)
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     return patientData;
   }
