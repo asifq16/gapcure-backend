@@ -24,6 +24,9 @@ export class PatientParamsDto {
 
 export class PythoScoreDto {
   @IsString()
+  public id: string;
+
+  @IsString()
   public identifier: string;
 }
 

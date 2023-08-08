@@ -6,10 +6,10 @@ const Patient = {
       AttributeName: 'id',
       AttributeType: 'S',
     },
-    {
+    /* {
       AttributeName: 'name',
       AttributeType: 'S',
-    },
+    }, */
     {
       AttributeName: 'identifier',
       AttributeType: 'S',
@@ -40,10 +40,10 @@ const Patient = {
           KeyType: 'HASH',
           AttributeName: 'identifier',
         },
-        {
+        /* {
           KeyType: 'RANGE',
           AttributeName: 'name',
-        },
+        }, */
       ],
     },
     {

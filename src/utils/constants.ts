@@ -6,8 +6,8 @@ export const HEALTH_GORILLA_BASE_URL = 'https://sandbox.healthgorilla.com';
 
 // Health Gorilla API endpoints
 export const HEALTH_GORILLA_AUTH_API = 'oauth/token';
-export const HEALTH_GORILLA_PATIENT_API = '/fhir/R4/Patient';
-export const LOOKUP_END_POINT = '/$cw-lookup';
+export const HEALTH_GORILLA_PATIENT_API = 'fhir/R4/Patient';
+export const LOOKUP_END_POINT_KEY = '$cw-lookup';
 
 //Pytho Score Base Url
 export const PYTHO_SCORE_API_BASE_URL = '';

@@ -1,4 +1,4 @@
-import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API, LOOKUP_END_POINT } from '@/utils/constants';
+import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API, LOOKUP_END_POINT_KEY } from '@/utils/constants';
 import axios, { AxiosResponse } from 'axios';
 import patientMockData from './mockData/patient.json';
 import { HttpException } from '@/exceptions/HttpException';
@@ -15,7 +15,7 @@ class HealthGorillaService {
    */
   private async getToken(): Promise<AxiosResponse> {
     try {
-      const data = qs.stringify({
+      const payload = qs.stringify({
         grant_type: GRANT_TYPE,
         client_id: CLIENT_ID,
         assertion: ASSERTION,
@@ -28,7 +28,7 @@ class HealthGorillaService {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        data: data,
+        data: payload,
       };
 
       return await axios(config);
@@ -61,7 +61,7 @@ class HealthGorillaService {
 
     const config = {
       method: 'get',
-      url: `${HEALTH_GORILLA_BASE_URL}${HEALTH_GORILLA_PATIENT_API}/${identifier}${LOOKUP_END_POINT}`,
+      url: `${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}/${LOOKUP_END_POINT_KEY}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -69,7 +69,7 @@ class HealthGorillaService {
 
     patientData = await axios(config)
       .then(function (response) {
-        return response.data;
+        return response?.data;
       })
       .catch(function (error) {
         console.log(error);

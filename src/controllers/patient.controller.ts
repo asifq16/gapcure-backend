@@ -15,8 +15,8 @@ class PatientController {
 
   public pythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
+      const id: string = req.body.id; // TODO: need to check how to handle this
       const identifier: string = req.body.identifier;
-      const mock = false;
       let score: string;
       let createPatientResponse: Patient;
 
@@ -33,15 +33,19 @@ class PatientController {
       const patient = await this.patientService.findPatientById(findPatientParams);
       if (!patient) {
         // Patient not found in the DB, call Health Gorilla Service
-        const patientHG = await this.healthGorillaService.getPatientInfo(identifier, mock);
+        const patientHG: any = await this.healthGorillaService.getPatientInfo(id, false); // TODO: Need to check how to get info by identifier
 
-        if (patientHG) {
+        if (patientHG && patientHG?.entry?.length) {
+          let resourceData = patientHG.entry[0].resource;
+          resourceData = { ...resourceData, identifier: resourceData.id };
+          delete resourceData.id;
+
           // Insert the user data into the DB
           const patientData: PatientParamsInput = {
             TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
             Item: {
               id: `${generateUuid()}`,
-              ...patientHG,
+              ...resourceData,
               pythoScore: '0',
             },
           };
@@ -52,7 +56,7 @@ class PatientController {
 
       if (patient || createPatientResponse) {
         // Use Health Gorilla response and call Pytho Score API using Pytho Service
-        score = await this.pythoScoreService.getPythoScore(identifier, mock);
+        score = await this.pythoScoreService.getPythoScore(identifier, true);
 
         let data: Patient;
 

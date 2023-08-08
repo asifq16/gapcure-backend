@@ -2,19 +2,17 @@
 provider "aws" {
   region = "us-east-1"
 }
-# Create an ecs cluster
+
 resource "aws_ecs_cluster" "my_cluster" {
   name = "pytho-score-api"
 }
 
-# Create an ecr repository
 resource "aws_ecr_repository" "my_ecr_repo" {
   name = "pytho-score-api"
 }
 
-# Create an ecs task definition
 resource "aws_ecs_task_definition" "my_task_definition" {
-  family                   = "pytho-score-api" # Name your task
+  family                   = "pytho-score-api" # Name of the task
   container_definitions    = <<DEFINITION
   [
     {
@@ -39,7 +37,6 @@ resource "aws_ecs_task_definition" "my_task_definition" {
   execution_role_arn       = "arn:aws:iam::574571384854:role/ecsTaskExecutionRole"
 }
 
-# Create an ecs service
 resource "aws_ecs_service" "my_service" {
   name            = "pytho-score-api"
   cluster         = aws_ecs_cluster.my_cluster.id
@@ -58,24 +55,19 @@ resource "null_resource" "docker_build_push" {
   # Use the depends_on attribute to ensure the Docker image is built before deploying the ECS service
   depends_on = [aws_ecr_repository.my_ecr_repo]
 
-# Authentication token
  provisioner "local-exec" {
     command = "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 574571384854.dkr.ecr.us-east-1.amazonaws.com"
  }
 
-# Build your Docker image
   provisioner "local-exec" {
     
     command = "docker build -t ${aws_ecr_repository.my_ecr_repo.repository_url}:latest -f Dockerfile ."
   }
   
-# Tag your image  
 provisioner "local-exec" {
     command = "docker tag pytho-score-api:latest 574571384854.dkr.ecr.us-east-1.amazonaws.com/pytho-score-api:latest"
    
   }
-
-# Push image  
   provisioner "local-exec" {
     command = "docker push ${aws_ecr_repository.my_ecr_repo.repository_url}:latest"
   }
