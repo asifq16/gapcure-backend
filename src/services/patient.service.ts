@@ -29,6 +29,11 @@ class PatientService {
         generalPractitioner: result.generalPractitioner,
         managingOrganization: result.managingOrganization,
         link: result.link,
+        entry: result.entry,
+        type: result.type,
+        meta: result.meta,
+        resourceType: result.resourceType,
+        total: result.total,
       };
 
       return patient;
@@ -62,6 +67,11 @@ class PatientService {
         generalPractitioner: patientData.generalPractitioner,
         managingOrganization: patientData.managingOrganization,
         link: patientData.link,
+        entry: patientData.entry,
+        type: patientData.type,
+        meta: patientData.meta,
+        resourceType: patientData.resourceType,
+        total: patientData.total,
       };
 
       return patient;
@@ -91,6 +101,11 @@ class PatientService {
         generalPractitioner: result.generalPractitioner,
         managingOrganization: result.managingOrganization,
         link: result.link,
+        entry: result.entry,
+        type: result.type,
+        meta: result.meta,
+        resourceType: result.resourceType,
+        total: result.total,
       };
 
       return patientData;
@@ -120,6 +135,11 @@ class PatientService {
         generalPractitioner: item.generalPractitioner,
         managingOrganization: item.managingOrganization,
         link: item.link,
+        entry: item.entry,
+        type: item.type,
+        meta: item.meta,
+        resourceType: item.resourceType,
+        total: item.total,
       }));
 
       return patientData;

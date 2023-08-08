@@ -16,7 +16,7 @@ class PatientController {
   public pythoScore = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       const identifier: string = req.body.identifier;
-      const mock = true;
+      let mock = false;
       let score: string;
       let createPatientResponse: Patient;
 
@@ -52,6 +52,7 @@ class PatientController {
 
       if (patient || createPatientResponse) {
         // Use Health Gorilla response and call Pytho Score API using Pytho Service
+        mock = false;
         score = await this.pythoScoreService.getPythoScore(identifier, mock);
 
         let data: Patient;
