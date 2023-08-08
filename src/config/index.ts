@@ -16,6 +16,6 @@ export const {
   ENABLE_CRON,
   GRANT_TYPE,
   SCOPE,
-  CLINT_ID,
+  CLIENT_ID,
   ASSERTION,
 } = process.env;
