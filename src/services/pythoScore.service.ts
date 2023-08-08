@@ -32,8 +32,7 @@ class PythoScoreService {
    * @param identifier Patient unique identifier - ssn
    * @returns string
    */
-  public async getPythoScore(identifier: string, mock): Promise<string> {
-    mock = true;
+  public async getPythoScore(identifier: string, mock = true): Promise<string> {
     if (mock) {
       return '25';
     }

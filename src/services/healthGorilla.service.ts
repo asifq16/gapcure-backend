@@ -50,7 +50,7 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Patient
    */
-  public async getPatientInfo(identifier: string, mock = false): Promise<Patient> {
+  public async getPatientInfo(identifier: string, mock): Promise<Patient> {
     let patientData: Patient;
 
     if (mock) {
