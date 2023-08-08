@@ -1,19 +1,12 @@
-import {
-  ASSERTION,
-  CLIENT_ID,
-  GRANT_TYPE,
-  HEALTH_GORILLA_AUTH_API,
-  HEALTH_GORILLA_BASE_URL,
-  HEALTH_GORILLA_PATIENT_API,
-  LOOKUP_END_POINT,
-  SCOPE,
-} from '@/utils/constants';
+import { HEALTH_GORILLA_AUTH_API, HEALTH_GORILLA_BASE_URL, HEALTH_GORILLA_PATIENT_API, LOOKUP_END_POINT } from '@/utils/constants';
 import axios, { AxiosResponse } from 'axios';
 import patientMockData from './mockData/patient.json';
 import { HttpException } from '@/exceptions/HttpException';
 import PatientService from './patient.service';
 import { Patient } from '@/interfaces/patient.interface';
 import qs from 'qs';
+import { ASSERTION, GRANT_TYPE, SCOPE } from '@/config';
+import { CLIENT_RENEG_WINDOW } from 'tls';
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -25,7 +18,7 @@ class HealthGorillaService {
     try {
       const data = qs.stringify({
         grant_type: GRANT_TYPE,
-        client_id: CLIENT_ID,
+        client_id: CLIENT_RENEG_WINDOW,
         assertion: ASSERTION,
         scope: SCOPE,
       });
@@ -50,7 +43,7 @@ class HealthGorillaService {
    * @param identifier Patient unique identifier - ssn
    * @returns Patient
    */
-  public async getPatientInfo(identifier: string, mock): Promise<Patient> {
+  public async getPatientInfo(identifier: string, mock = false): Promise<Patient> {
     let patientData: Patient;
 
     if (mock) {

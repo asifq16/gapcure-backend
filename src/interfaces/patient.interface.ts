@@ -99,7 +99,7 @@ interface Link {
 }
 
 interface Meta {
-  profile: [];
+  profile: String[];
 }
 
 export interface Patient {
