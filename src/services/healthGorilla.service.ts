@@ -15,13 +15,13 @@ import qs from 'qs';
 import { ASSERTION, CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
 import CryptoJS from 'crypto-js';
 
+/**
+ * Declair variable to store token and expiration time 
+ */
 let token: string | null = null;
 let expirationTime: number | null = null;
 class HealthGorillaService {
   public patientService = new PatientService();
-  // private token: string | null = null; // Initialize token as null
-  // private expirationTIme: number | null = null; // Initialize token as null
-
   /**
    * Function to get assertion token for Health Gorilla APIs
    */
