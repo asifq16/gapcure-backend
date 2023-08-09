@@ -15,3 +15,6 @@ export const PYTHO_SCORE_API_BASE_URL = '';
 // Pytho Score API endpoints
 export const PYTHO_SCORE_AUTH_API = '';
 export const PYTHO_SCORE__PATIENT_API = '';
+
+export const CLIENT_WEB_URL = 'https://www.gapcure.com';
+export const CLIENT_WEB_NAME = 'gapcure';

@@ -18,4 +18,5 @@ export const {
   SCOPE,
   CLIENT_ID,
   ASSERTION,
+  CLIENT_SECRET,
 } = process.env;
