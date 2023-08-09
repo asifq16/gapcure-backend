@@ -15,10 +15,12 @@ import qs from 'qs';
 import { ASSERTION, CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
 import CryptoJS from 'crypto-js';
 
+let token: string | null = null;
+let expirationTime: number | null = null;
 class HealthGorillaService {
   public patientService = new PatientService();
-  private token: string | null = null; // Initialize token as null
-  private expirationTIme: number | null = null; // Initialize token as null
+  // private token: string | null = null; // Initialize token as null
+  // private expirationTIme: number | null = null; // Initialize token as null
 
   /**
    * Function to get assertion token for Health Gorilla APIs
@@ -119,13 +121,13 @@ class HealthGorillaService {
       return patientData;
     }
 
-    if (!this.token && Date.now() < this.expirationTIme) {
+    if (!token && Date.now() < expirationTime) {
       const authResponse: AxiosResponse = await this.getToken();
       if (!authResponse?.data) {
         throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
       }
-      this.token = authResponse?.data?.access_token;
-      this.expirationTIme = Date.now() + 3600 * 1000; //
+      token = authResponse?.data?.access_token;
+      expirationTime = Date.now() + 3600 * 1000; //
     }
 
     // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
