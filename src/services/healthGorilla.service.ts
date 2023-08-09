@@ -12,14 +12,15 @@ import { HttpException } from '@/exceptions/HttpException';
 import PatientService from './patient.service';
 import { Patient } from '@/interfaces/patient.interface';
 import qs from 'qs';
-import { ASSERTION, CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
+import { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
 import CryptoJS from 'crypto-js';
 
 /**
- * Declair variable to store token and expiration time 
+ * Declare variable to store token and expiration time
  */
 let token: string | null = null;
 let expirationTime: number | null = null;
+
 class HealthGorillaService {
   public patientService = new PatientService();
   /**
@@ -43,7 +44,7 @@ class HealthGorillaService {
         iss: CLIENT_WEB_URL,
         sub: CLIENT_WEB_NAME,
         iat: currentTimestamp,
-        exp: currentTimestamp + 604800, // expiry time is 7 days from time of creation
+        exp: currentTimestamp + 86400, // expiry time is 24 hours from time of creation
       };
 
       function base64url(source) {
@@ -60,18 +61,18 @@ class HealthGorillaService {
         return encodedSource;
       }
 
-      // encode header
+      // Encode header
       const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
       const encodedHeader = base64url(stringifiedHeader);
 
-      // encode data
+      // Encode data
       const stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
       const encodedData = base64url(stringifiedData);
 
-      // build token
+      // Build token
       const token = `${encodedHeader}.${encodedData}`;
 
-      // sign token
+      // Sign token
       let signature = CryptoJS.HmacSHA256(token, jwtSecret);
       signature = base64url(signature);
       const signedToken = `${token}.${signature}`;
@@ -86,10 +87,12 @@ class HealthGorillaService {
    */
   private async getToken(): Promise<AxiosResponse> {
     try {
+      const assertionToken = await this.getAssertionToken();
+
       const payload = qs.stringify({
         grant_type: GRANT_TYPE,
         client_id: CLIENT_ID,
-        assertion: await this.getAssertionToken(),
+        assertion: assertionToken,
         scope: SCOPE,
       });
 
@@ -114,42 +117,54 @@ class HealthGorillaService {
    * @returns Patient
    */
   public async getPatientInfo(identifier: string, mock = false): Promise<Patient> {
-    let patientData: Patient;
+    try {
+      let patientData: Patient;
 
-    if (mock) {
-      patientData = { ...patientMockData, identifier };
-      return patientData;
-    }
-
-    if (!token && Date.now() < expirationTime) {
-      const authResponse: AxiosResponse = await this.getToken();
-      if (!authResponse?.data) {
-        throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
+      if (mock) {
+        patientData = { ...patientMockData, identifier };
+        return patientData;
       }
-      token = authResponse?.data?.access_token;
-      expirationTime = Date.now() + 3600 * 1000; //
+
+      const currentTimestamp = Math.floor(Date.now() / 1000); // Seconds
+
+      if (!token || (token && currentTimestamp > expirationTime)) {
+        const authResponse: AxiosResponse = await this.getToken();
+        if (!authResponse?.data) {
+          throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
+        }
+
+        token = authResponse?.data?.access_token;
+        expirationTime = currentTimestamp + 43200; // Add 12 hours
+      }
+
+      // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
+      // TODO: Need to handle the API response
+
+      const config = {
+        method: 'get',
+        url: `${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}/${LOOKUP_END_POINT_KEY}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      patientData = await axios(config)
+        .then(function (response) {
+          return response?.data;
+        })
+        .catch(function (error) {
+          throw error;
+        });
+
+      return patientData;
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        token = null;
+        expirationTime = null;
+        // TODO: Need to test condition
+        this.getPatientInfo(identifier);
+      }
     }
-
-    // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
-    // TODO: Need to handle the API response
-
-    const config = {
-      method: 'get',
-      url: `${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}/${LOOKUP_END_POINT_KEY}`,
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-      },
-    };
-
-    patientData = await axios(config)
-      .then(function (response) {
-        return response?.data;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    return patientData;
   }
 }
 

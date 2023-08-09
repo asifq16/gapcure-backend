@@ -16,5 +16,6 @@ export const PYTHO_SCORE_API_BASE_URL = '';
 export const PYTHO_SCORE_AUTH_API = '';
 export const PYTHO_SCORE__PATIENT_API = '';
 
+// Health Gorilla
 export const CLIENT_WEB_URL = 'https://www.gapcure.com';
-export const CLIENT_WEB_NAME = 'gapcure';
+export const CLIENT_WEB_NAME = 'gapcure.api';

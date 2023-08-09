@@ -17,6 +17,5 @@ export const {
   GRANT_TYPE,
   SCOPE,
   CLIENT_ID,
-  ASSERTION,
   CLIENT_SECRET,
 } = process.env;
