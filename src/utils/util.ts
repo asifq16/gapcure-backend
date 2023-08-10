@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import cache from 'memory-cache';
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -22,3 +23,9 @@ export const isEmpty = (value: string | number | object): boolean => {
 export const generateUuid = (): Promise<string> => {
   return uuidv4();
 };
+
+export const getCacheToken = async (): Promise<object> => {
+  return cache.get('myTokenKey');
+};
+
+export const storeToken = async (tokenData): Promise<object> => cache.put('myTokenKey', tokenData, tokenData.expirationTime);
