@@ -56,11 +56,16 @@ components:
       type: object
       required:
         - identifier
+        - id
       properties:
         identifier:
           type: string
           minLength: 1
-          maxLength: 25            
+          maxLength: 25  
+        id:
+          type: string
+          minLength: 1
+          maxLength: 25             
     PostPythoScoreResponse:
       type: 'object'
       properties:
@@ -78,26 +83,26 @@ components:
                   type: array
                   items: # Specify the items field for array
                     type: object
-                  properties:
-                    family:
-                      type: string
-                    given:
-                      type: array
+                    properties:
+                      family:
+                        type: string
+                      given:
+                        type: array
                       items:
                         type: string
-                    use:
-                      type: string  
+                      use:
+                        type: string  
                 telecom:
                   type: array
                   items: # Specify the items field for array
                     type: object
-                  properties:
-                    value:
-                      type: string
-                    use:
-                      type: string
-                    system:
-                      type: string 
+                    properties:
+                      value:
+                        type: string
+                      use:
+                        type: string
+                      system:
+                        type: string 
                 gender:
                   type: string
                 birthDate:
@@ -106,30 +111,38 @@ components:
                   type: array
                   items: # Specify the items field for array
                     type: object
-                  properties:
-                    country:
-                      type: string
-                    period:
-                      type: object
-                    city:
-                      type: string   
-                    use:
-                      type: string
-                    line:
-                      type: array
-                    items:
+                    properties:
+                      country:
                         type: string
-                    postalCode:
-                      type: string
-                    state:
-                      type: string  
+                      period:
+                        type: object
+                        properties:
+                          start:
+                            type: string 
+                      city:
+                        type: string   
+                      use:
+                        type: string
+                      line:
+                        type: array
+                        items: # Specify the items field for array
+                          type: string
+                      postalCode:
+                        type: string
+                      state:
+                        type: string  
                 link:
                   type: array
                   items: # Specify the items field for array
                     type: object
-                  properties:
-                    target:
-                      type: object  
+                    properties:
+                      target:
+                        type: object  
+                        properties:
+                          reference:
+                            type: string
+                          country:
+                            display: string  
                 pythoScore:
                   type: string
 
