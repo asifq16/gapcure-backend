@@ -74,48 +74,62 @@ components:
                   type: string
                 identifier:
                   type: string
-                active:
-                  type: boolean
                 name:
-                  type: string
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
+                  properties:
+                    family:
+                      type: string
+                    given:
+                      type: array
+                      items:
+                        type: string
+                    use:
+                      type: string  
+                telecom:
+                  type: array
+                  items: # Specify the items field for array
+                    type: object
+                  properties:
+                    value:
+                      type: string
+                    use:
+                      type: string
+                    system:
+                      type: string 
                 gender:
                   type: string
                 birthDate:
                   type: string
-                deceasedBoolean:
-                  type: boolean
                 address:
                   type: array
                   items: # Specify the items field for array
                     type: object
-                maritalStatus:
-                  type: string
-                multipleBirthBoolean:
-                  type: boolean
-                photo:
-                  type: array
-                  items: # Specify the items field for array
-                    type: object
-                contact:
-                  type: array
-                  items: # Specify the items field for array
-                    type: object
-                communication:
-                  type: array
-                  items: # Specify the items field for array
-                    type: object
-                generalPractitioner:
-                  type: array
-                  items: # Specify the items field for array
-                    type: object
-                managingOrganization:
-                  type: array
-                  items: # Specify the items field for array
-                    type: object
+                  properties:
+                    country:
+                      type: string
+                    period:
+                      type: object
+                    city:
+                      type: string   
+                    use:
+                      type: string
+                    line:
+                      type: array
+                    items:
+                        type: string
+                    postalCode:
+                      type: string
+                    state:
+                      type: string  
                 link:
                   type: array
                   items: # Specify the items field for array
                     type: object
+                  properties:
+                    target:
+                      type: object  
                 pythoScore:
                   type: string
 
