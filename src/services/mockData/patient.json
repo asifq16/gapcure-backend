@@ -1,42 +1,41 @@
- {
-  "id": "8623d4b5-175e-4052-9dc6-5a9e764202ef",
-  "identifier": "cw-0427f6d0-b2af-41d5-80d3-3322f4d5cae8",
+{
+  "id": "cw-0427f6d0-b2af-41d5-80d3-3322f4d5cae8",
   "name": [
       {
+          "use": "usual",
           "family": "Rubin",
           "given": [
               "Billy"
-          ],
-          "use": "usual"
+          ]
       }
   ],
   "telecom": [
       {
+          "system": "phone",
           "value": "(111) 111 1111",
-          "use": "mobile",
-          "system": "phone"
+          "use": "mobile"
       },
       {
+          "system": "phone",
           "value": "(111) 111 1111",
-          "use": "work",
-          "system": "phone"
+          "use": "work"
       }
   ],
   "gender": "male",
   "birthDate": "1990-06-08",
   "address": [
       {
-          "country": "US",
-          "period": {
-              "start": "1988-10-15T00:00:00+00:00"
-          },
-          "city": "Monica",
           "use": "home",
           "line": [
               "123 Fake Street"
           ],
+          "city": "Monica",
+          "state": "CA",
           "postalCode": "90402",
-          "state": "CA"
+          "country": "US",
+          "period": {
+              "start": "1988-10-15T00:00:00+00:00"
+          }
       }
   ],
   "link": [
@@ -47,4 +46,4 @@
           }
       }
   ]
-  }
+}

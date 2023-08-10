@@ -1,154 +1,51 @@
 [
-    {
-        "resourceType": "Patient",
-        "identifier": "11111",
-        "active": true,
-        "name": "John Doe",
-        "telecom": [
-          {
-            "phone": "123-456-7890"
-          }
-        ],
-        "gender": "male",
-        "birthDate": "1990-01-01",
-        "deceasedBoolean": false,
-        "address": [
-          {
-            "country": "United States",
-            "state": "California",
-            "city": "Los Angeles",
-            "locality": "Downtown"
-          }
-        ],
-        "maritalStatus": "single",
-        "multipleBirthBoolean": false,
-        "photo": [
-          {
-            "file_url": "https://example.com/photo1.jpg"
-          }
-        ],
-        "contact": [
-          {
-            "relationship": "parent",
-            "name": "Jane Smith",
-            "telecom": [
-              {
-                "phone": "555-123-4567"
-              }
-            ],
-            "address": {
-              "country": "United States",
-              "state": "California",
-              "city": "San Francisco",
-              "locality": "Downtown"
-            },
-            "gender": "female",
-            "organization": "XYZ Hospital",
-            "period": {
-              "time": "2022-01-01T08:00:00Z"
-            }
-          }
-        ],
-        "communication": [
-          {
-            "language": "English",
-            "preferred": true
-          },
-          {
-            "language": "Spanish",
-            "preferred": false
-          }
-        ],
-        "generalPractitioner": [
-          {
-            "name": "Dr. Smith",
-            "contact_number": "555-987-6543"
-          }
-        ],
-        "managingOrganization": {
-          "name": "ABC Hospital",
-          "contact_number": "555-123-4567"
+  {
+    "identifier": "cw-0427f6d0-b2af-41d5-80d3-3322f4d5cae8",
+    "name": [
+        {
+            "use": "usual",
+            "family": "Rubin",
+            "given": [
+                "Billy"
+            ]
+        }
+    ],
+    "telecom": [
+        {
+            "system": "phone",
+            "value": "(111) 111 1111",
+            "use": "mobile"
         },
-        "link": [
-            {
-                "url": "https://example.com/photo1.jpg"
-              }
-        ]
-      },
-      {
-        "resourceType": "Patient",
-        "identifier": "123456",
-        "active": true,
-        "name": "John ",
-        "telecom": [
-          {
-            "phone": "123-456-7890"
-          }
-        ],
-        "gender": "female",
-        "birthDate": "1990-01-01",
-        "deceasedBoolean": false,
-        "address": [
-          {
-            "country": "United States",
-            "state": "California",
-            "city": "Los Angeles",
-            "locality": "Downtown"
-          }
-        ],
-        "maritalStatus": "single",
-        "multipleBirthBoolean": false,
-        "photo": [
-          {
-            "file_url": "https://example.com/photo1.jpg"
-          }
-        ],
-        "contact": [
-          {
-            "relationship": "parent",
-            "name": "Jane Smith",
-            "telecom": [
-              {
-                "phone": "555-123-4567"
-              }
+        {
+            "system": "phone",
+            "value": "(111) 111 1111",
+            "use": "work"
+        }
+    ],
+    "gender": "male",
+    "birthDate": "1990-06-08",
+    "address": [
+        {
+            "use": "home",
+            "line": [
+                "123 Fake Street"
             ],
-            "address": {
-              "country": "United States",
-              "state": "California",
-              "city": "San Francisco",
-              "locality": "Downtown"
-            },
-            "gender": "female",
-            "organization": "XYZ Hospital",
+            "city": "Monica",
+            "state": "CA",
+            "postalCode": "90402",
+            "country": "US",
             "period": {
-              "time": "2022-01-01T08:00:00Z"
+                "start": "1988-10-15T00:00:00+00:00"
             }
-          }
-        ],
-        "communication": [
-          {
-            "language": "English",
-            "preferred": true
-          },
-          {
-            "language": "Spanish",
-            "preferred": false
-          }
-        ],
-        "generalPractitioner": [
-          {
-            "name": "Dr. Smith",
-            "contact_number": "555-987-6543"
-          }
-        ],
-        "managingOrganization": {
-          "name": "ABC Hospital",
-          "contact_number": "555-123-4567"
-        },
-        "link": [
-            {
-                "url": "https://example.com/photo1.jpg"
-              }
-        ]
-      }
-   ]
+        }
+    ],
+    "link": [
+        {
+            "target": {
+                "reference": "Patient/e0ffc764c7d112c1d9fb81b7",
+                "display": "Billy Rubin"
+            }
+        }
+    ]
+  }
+]
