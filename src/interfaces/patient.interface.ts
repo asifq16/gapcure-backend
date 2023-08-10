@@ -43,10 +43,10 @@ export interface Patient {
 
 export interface PatientParamsInput {
   TableName: string;
-  Item: Patient;
+  Item: {};
 }
 
 export interface PatientUpdateInput {
   TableName: string;
-  Item: Patient;
+  Item: {};
 }

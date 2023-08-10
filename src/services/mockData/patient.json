@@ -1,76 +1,50 @@
  {
-    "resourceType": "Patient",
-    "identifier": "1a6b9d36-8e60-4648-82c4-030bdf79a391c",
-    "active": true,
-    "name": "John Doe",
-    "telecom": [
+  "id": "8623d4b5-175e-4052-9dc6-5a9e764202ef",
+  "identifier": "cw-0427f6d0-b2af-41d5-80d3-3322f4d5cae8",
+  "name": [
       {
-        "phone": "123-456-7890"
+          "family": "Rubin",
+          "given": [
+              "Billy"
+          ],
+          "use": "usual"
       }
-    ],
-    "gender": "male",
-    "birthDate": "1990-01-01",
-    "deceasedBoolean": false,
-    "address": [
+  ],
+  "telecom": [
       {
-        "country": "United States",
-        "state": "California",
-        "city": "Los Angeles",
-        "locality": "Downtown"
-      }
-    ],
-    "maritalStatus": "single",
-    "multipleBirthBoolean": false,
-    "photo": [
-      {
-        "file_url": "https://example.com/photo1.jpg"
-      }
-    ],
-    "contact": [
-      {
-        "relationship": "parent",
-        "name": "Jane Smith",
-        "telecom": [
-          {
-            "phone": "555-123-4567"
-          }
-        ],
-        "address": {
-          "country": "United States",
-          "state": "California",
-          "city": "San Francisco",
-          "locality": "Downtown"
-        },
-        "gender": "female",
-        "organization": "XYZ Hospital",
-        "period": {
-          "time": "2022-01-01T08:00:00Z"
-        }
-      }
-    ],
-    "communication": [
-      {
-        "language": "English",
-        "preferred": true
+          "value": "(111) 111 1111",
+          "use": "mobile",
+          "system": "phone"
       },
       {
-        "language": "Spanish",
-        "preferred": false
+          "value": "(111) 111 1111",
+          "use": "work",
+          "system": "phone"
       }
-    ],
-    "generalPractitioner": [
+  ],
+  "gender": "male",
+  "birthDate": "1990-06-08",
+  "address": [
       {
-        "name": "Dr. Smith",
-        "contact_number": "555-987-6543"
+          "country": "US",
+          "period": {
+              "start": "1988-10-15T00:00:00+00:00"
+          },
+          "city": "Monica",
+          "use": "home",
+          "line": [
+              "123 Fake Street"
+          ],
+          "postalCode": "90402",
+          "state": "CA"
       }
-    ],
-    "managingOrganization": {
-      "name": "ABC Hospital",
-      "contact_number": "555-123-4567"
-    },
-    "link": [
-        {
-            "url": "https://example.com/photo1.jpg"
+  ],
+  "link": [
+      {
+          "target": {
+              "reference": "Patient/e0ffc764c7d112c1d9fb81b7",
+              "display": "Billy Rubin"
           }
-    ]
+      }
+  ]
   }
