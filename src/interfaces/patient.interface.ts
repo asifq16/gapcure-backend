@@ -48,5 +48,6 @@ export interface PatientParamsInput {
 
 export interface PatientUpdateInput {
   TableName: string;
-  Item: {};
+  Item: Patient;
+  pythoScore?: string;
 }

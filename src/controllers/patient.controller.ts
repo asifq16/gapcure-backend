@@ -109,7 +109,7 @@ class PatientController {
           // Call Get Pytho Score API
           const pythoScore = await this.pythoScoreService.getPythoScore(patient.identifier);
           // Insert the user data into the DB
-          const patientData: PatientParamsInput = {
+          const patientData: PatientUpdateInput = {
             TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
             Item: {
               ...patient,
