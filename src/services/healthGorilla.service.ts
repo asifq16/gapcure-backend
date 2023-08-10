@@ -14,12 +14,12 @@ import { Patient } from '@/interfaces/patient.interface';
 import qs from 'qs';
 import { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
 import CryptoJS from 'crypto-js';
+import { getCacheToken, storeToken } from '@/utils/util';
 
 /**
  * Declare variable to store token and expiration time
  */
-let token: string | null = null;
-let expirationTime: number | null = null;
+let tokenData: any | null = null;
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -127,15 +127,19 @@ class HealthGorillaService {
 
       const currentTimestamp = Math.floor(Date.now() / 1000); // Seconds
 
-      if (!token || (token && currentTimestamp > expirationTime)) {
+      if (!tokenData || currentTimestamp > tokenData?.expirationTime) {
         const authResponse: AxiosResponse = await this.getToken();
         if (!authResponse?.data) {
           throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
         }
 
-        token = authResponse?.data?.access_token;
-        expirationTime = currentTimestamp + 43200; // Add 12 hours
+        const token = authResponse?.data?.access_token;
+        const expirationTime = currentTimestamp + 43200; // Add 12 hours
+        await storeToken({ token, expirationTime });
       }
+
+      //get token from cache memory
+      tokenData = await getCacheToken();
 
       // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
       // TODO: Need to handle the API response
@@ -144,7 +148,7 @@ class HealthGorillaService {
         method: 'get',
         url: `${HEALTH_GORILLA_BASE_URL}/${HEALTH_GORILLA_PATIENT_API}/${identifier}/${LOOKUP_END_POINT_KEY}`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${tokenData?.token}`,
         },
       };
 
@@ -159,8 +163,6 @@ class HealthGorillaService {
       return patientData;
     } catch (err) {
       if (err?.response?.status === 401) {
-        token = null;
-        expirationTime = null;
         // TODO: Need to test condition
         this.getPatientInfo(identifier);
       }
