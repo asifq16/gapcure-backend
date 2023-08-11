@@ -39,6 +39,8 @@ export interface Patient {
   address?: Address[];
   link?: Link[];
   pythoScore?: string;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface PatientParamsInput {

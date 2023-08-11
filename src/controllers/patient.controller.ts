@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import patientService from '@/services/patient.service';
 import { RequestWithInfo } from '@/interfaces/auth.interface';
 import { DYNAMODB_TABLE_INDEX, DYNAMODB_TABLE_NAMES } from '@/database/constants';
-import { generateUuid } from '@/utils/util';
+import { generateUuid, getCurrentTimeEpoch } from '@/utils/util';
 import HealthGorillaService from '@/services/healthGorilla.service';
 import PythoScoreService from '@/services/pythoScore.service';
 import { Patient, PatientParamsInput, PatientUpdateInput } from '@/interfaces/patient.interface';
@@ -38,6 +38,7 @@ class PatientController {
         if (patientHG && patientHG?.entry?.length) {
           let resourceData = patientHG.entry[0].resource;
           resourceData = { ...resourceData, identifier: resourceData.id };
+          resourceData.createdAt = getCurrentTimeEpoch();
           delete resourceData.id;
 
           // Insert the user data into the DB
@@ -61,11 +62,13 @@ class PatientController {
         let data: Patient;
 
         if (patient) {
+          patient.updatedAt = getCurrentTimeEpoch();
           data = {
             ...patient,
             pythoScore: score,
           };
         } else {
+          createPatientResponse.updatedAt = getCurrentTimeEpoch();
           data = {
             ...createPatientResponse,
             pythoScore: score,
