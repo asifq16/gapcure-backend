@@ -34,3 +34,7 @@ export const storeToken = async (tokenData): Promise<object> => cache.put('myTok
 export const getCurrentTimeEpoch = (): number => {
   return moment().unix();
 };
+
+export const getTimestamp = (days: number): number => {
+  return moment().subtract(days, 'days').unix();
+};

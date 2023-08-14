@@ -4,7 +4,7 @@ import HealthGorillaService from '@/services/healthGorilla.service';
 import PythoScoreService from '@/services/pythoScore.service';
 import { PatientUpdateInput } from '@/interfaces/patient.interface';
 import cron from 'node-schedule';
-import moment from 'moment';
+import { getCurrentTimeEpoch, getTimestamp } from '@/utils/util';
 
 class RefreshPythoScore {
   public patientService = new patientService();
@@ -12,15 +12,15 @@ class RefreshPythoScore {
   public pythoScoreService = new PythoScoreService();
 
   public startCron = async () => {
-    cron.scheduleJob('0 */12 * * *', async () => {
+    cron.scheduleJob('0 */12 * * * ', async () => {
       // 0 */12 * * *
       // */10 * * * * *
 
       try {
-        const twoDaysAgoTimestamp = moment().subtract(2, 'days').unix();
+        const twoDaysAgoTimestamp = getTimestamp(2);
         const getAllPatientParams = {
           TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
-          FilterExpression: '#updatedAt >:twoDaysAgoTimestamp', // Use >= to get items updated within the last 2 hours
+          FilterExpression: '#updatedAt <:twoDaysAgoTimestamp', // Use >= to get items updated within the last 2 hours
           ExpressionAttributeNames: {
             '#updatedAt': 'updatedAt',
           },
@@ -36,6 +36,7 @@ class RefreshPythoScore {
         // Step 2: Fetch updated Pytho Score using Pytho Score API for each patient
         for (const patient of patients) {
           const pythoScore = await this.pythoScoreService.getPythoScore(patient.identifier, true);
+          patient.updatedAt = getCurrentTimeEpoch();
 
           // Update the user data into the DB
           const updatePatientParams: PatientUpdateInput = {
