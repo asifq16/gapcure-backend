@@ -13,7 +13,6 @@ export const {
   SECRET_KEY,
   JWT_SECRET,
   DB_SYNC,
-  ENABLE_CRON,
   GRANT_TYPE,
   SCOPE,
   CLIENT_ID,
