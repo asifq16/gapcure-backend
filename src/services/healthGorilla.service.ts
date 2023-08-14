@@ -14,12 +14,15 @@ import { Patient } from '@/interfaces/patient.interface';
 import qs from 'qs';
 import { CLIENT_ID, CLIENT_SECRET, GRANT_TYPE, SCOPE } from '@/config';
 import CryptoJS from 'crypto-js';
-import { getCacheToken, storeToken } from '@/utils/util';
+import { TokenData } from '@interfaces/TokenData';
 
 /**
  * Declare variable to store token and expiration time
  */
-let tokenData: any | null = null;
+const tokenData: TokenData = {
+  token: null,
+  expirationTime: null,
+};
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -127,19 +130,15 @@ class HealthGorillaService {
 
       const currentTimestamp = Math.floor(Date.now() / 1000); // Seconds
 
-      if (!tokenData || currentTimestamp > tokenData?.expirationTime) {
+      if (!tokenData.token || currentTimestamp > tokenData?.expirationTime) {
         const authResponse: AxiosResponse = await this.getToken();
         if (!authResponse?.data) {
           throw new HttpException(500, 'Unable to fetch Health Gorilla access token');
         }
 
-        const token = authResponse?.data?.access_token;
-        const expirationTime = currentTimestamp + 43200; // Add 12 hours
-        await storeToken({ token, expirationTime });
+        tokenData.token = authResponse?.data?.access_token;
+        tokenData.expirationTime = currentTimestamp + 43200; // Add 12 hours
       }
-
-      //get token from cache memory
-      tokenData = await getCacheToken();
 
       // HG API Doc: https://developer.healthgorilla.com/docs/fhir-restful-api#patient
       // TODO: Need to handle the API response
@@ -162,7 +161,10 @@ class HealthGorillaService {
 
       return patientData;
     } catch (err) {
+      console.log('getPatientInfo Error: ', err);
       if (err?.response?.status === 401) {
+        tokenData.token = null;
+        tokenData.expirationTime = null;
         // TODO: Need to test condition
         this.getPatientInfo(identifier);
       }

@@ -34,7 +34,7 @@ class PythoScoreService {
    */
   public async getPythoScore(identifier: string, mock = false): Promise<string> {
     if (mock) {
-      return '15';
+      return '25';
     }
 
     const authResponse: AxiosResponse = await this.getToken();

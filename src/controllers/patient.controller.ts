@@ -19,6 +19,7 @@ class PatientController {
       const identifier: string = req.body.identifier;
       let score: string;
       let createPatientResponse: Patient;
+      const currentTimestamp = getCurrentTimeEpoch();
 
       const findPatientParams = {
         TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
@@ -33,12 +34,12 @@ class PatientController {
       const patient = await this.patientService.findPatientById(findPatientParams);
       if (!patient) {
         // Patient not found in the DB, call Health Gorilla Service
-        const patientHG: any = await this.healthGorillaService.getPatientInfo(id, false); // TODO: Need to check how to get info by identifier
+        const patientHG: any = await this.healthGorillaService.getPatientInfo(id); // TODO: Need to check how to get info by identifier
 
         if (patientHG && patientHG?.entry?.length) {
           let resourceData = patientHG.entry[0].resource;
           resourceData = { ...resourceData, identifier: resourceData.id };
-          resourceData.createdAt = getCurrentTimeEpoch();
+          resourceData.createdAt = currentTimestamp;
           delete resourceData.id;
 
           // Insert the user data into the DB
@@ -62,13 +63,13 @@ class PatientController {
         let data: Patient;
 
         if (patient) {
-          patient.updatedAt = getCurrentTimeEpoch();
+          patient.updatedAt = currentTimestamp;
           data = {
             ...patient,
             pythoScore: score,
           };
         } else {
-          createPatientResponse.updatedAt = getCurrentTimeEpoch();
+          createPatientResponse.updatedAt = currentTimestamp;
           data = {
             ...createPatientResponse,
             pythoScore: score,
@@ -96,6 +97,7 @@ class PatientController {
   public importData = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
     try {
       for (const record of patientsData) {
+        const currentTimestamp = getCurrentTimeEpoch();
         const findPatientParams = {
           TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
           IndexName: DYNAMODB_TABLE_INDEX.PATIENT_IDENTIFIER_INDEX,
@@ -116,6 +118,7 @@ class PatientController {
             TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
             Item: {
               ...patient,
+              updatedAt: currentTimestamp,
               pythoScore: pythoScore ?? '0',
             },
           };
@@ -131,6 +134,7 @@ class PatientController {
             Item: {
               id: `${generateUuid()}`,
               ...record,
+              updatedAt: currentTimestamp,
               pythoScore: pythoScore ?? '0',
             },
           };
