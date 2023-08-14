@@ -20,6 +20,8 @@ class PatientService {
         birthDate: result.birthDate,
         address: result.address,
         link: result.link,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       };
 
       return patient;
@@ -44,6 +46,8 @@ class PatientService {
         birthDate: patientData.birthDate,
         address: patientData.address,
         link: patientData.link,
+        createdAt: patientData.createdAt,
+        updatedAt: patientData.updatedAt,
       };
 
       return patient;
@@ -64,6 +68,8 @@ class PatientService {
         birthDate: result.birthDate,
         address: result.address,
         link: result.link,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       };
 
       return patientData;
@@ -84,6 +90,8 @@ class PatientService {
         birthDate: item.birthDate,
         address: item.address,
         link: item.link,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
       }));
 
       return patientData;
