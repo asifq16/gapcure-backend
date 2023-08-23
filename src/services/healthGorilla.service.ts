@@ -167,7 +167,10 @@ class HealthGorillaService {
         tokenData.expirationTime = null;
         // TODO: Need to test condition
         this.getPatientInfo(identifier);
+      } else if (err?.response?.status === 404) {
+        throw new HttpException(404, 'Patient not found');
       }
+      throw err;
     }
   }
 }

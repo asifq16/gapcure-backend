@@ -40,7 +40,7 @@ paths:
                 $ref: '#/components/schemas/CommonErrorResponseModel'
 
         '404':
-          description: '404 response: No Data Found'
+          description: '404 response: Patient not found'
           content:
             application/vnd.collection+json:
               schema:
@@ -150,10 +150,10 @@ components:
       type: 'object'
       title: 'ErrorSchema'
       properties:
+        errorCode:
+            type: 'number'
         errorMessage:
           type: 'string'
-        errorCode:
-          type: 'number'
     General:
       type: object
 
