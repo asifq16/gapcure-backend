@@ -90,6 +90,7 @@ class PatientController {
         return res.status(200).json({ data: updatePatientResponse, pythoScore: score });
       }
     } catch (error) {
+      console.log('pythoScore Error:', error);
       next(error);
     }
   };
