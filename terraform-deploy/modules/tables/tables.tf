@@ -37,7 +37,7 @@ variable "tables" {
         },
         {
           name = "pythoScore"
-          type = "S"
+          type = "N"
         },
       ]
       global_secondary_indexes = [

@@ -297,9 +297,7 @@ components:
                 type: string
         # Other properties...
         pythoScore:
-          type: string
-          minLength: 1
-          maxLength: 25                    
+          type: number                  
     PatientPostResponseModel:
       type: 'object'
       properties:
@@ -356,7 +354,7 @@ components:
                   items: # Specify the items field for array
                     type: object
                 pythoScore:
-                  type: string
+                  type: number
 
     PatientGetResponseModel:
       type: 'object'
@@ -413,7 +411,7 @@ components:
                 items: # Specify the items field for array
                   type: object
               pythoScore:
-                type: string
+                type: number
 
     PatientDetailResponseModel:
       type: 'object'
@@ -471,7 +469,7 @@ components:
                   items: # Specify the items field for array
                     type: object
                 pythoScore:
-                  type: string
+                  type: number
     CommonErrorResponseModel:
       type: 'object'
       title: 'ErrorSchema'

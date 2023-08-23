@@ -144,7 +144,7 @@ components:
                           display:
                             type: string  
                 pythoScore:
-                  type: string
+                  type: number
 
     CommonErrorResponseModel:
       type: 'object'

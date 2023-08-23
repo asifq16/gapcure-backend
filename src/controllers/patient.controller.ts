@@ -17,7 +17,7 @@ class PatientController {
     try {
       const id: string = req.body.id; // TODO: need to check how to handle this
       const identifier: string = req.body.identifier;
-      let score: string;
+      let score: number;
       let createPatientResponse: Patient;
       const currentTimestamp = getCurrentTimeEpoch();
 
@@ -48,7 +48,7 @@ class PatientController {
             Item: {
               id: `${generateUuid()}`,
               ...resourceData,
-              pythoScore: '0',
+              pythoScore: 0,
             },
           };
 
@@ -119,7 +119,7 @@ class PatientController {
             Item: {
               ...patient,
               updatedAt: currentTimestamp,
-              pythoScore: pythoScore ?? '0',
+              pythoScore: pythoScore ?? 0,
             },
           };
 
@@ -135,7 +135,7 @@ class PatientController {
               id: `${generateUuid()}`,
               ...record,
               updatedAt: currentTimestamp,
-              pythoScore: pythoScore ?? '0',
+              pythoScore: pythoScore ?? 0,
             },
           };
 

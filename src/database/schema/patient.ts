@@ -16,7 +16,7 @@ const Patient = {
     },
     {
       AttributeName: 'pythoScore',
-      AttributeType: 'S',
+      AttributeType: 'N',
     },
   ],
   KeySchema: [

@@ -38,7 +38,7 @@ export interface Patient {
   birthDate?: string;
   address?: Address[];
   link?: Link[];
-  pythoScore?: string;
+  pythoScore?: number;
   createdAt: number;
   updatedAt: number;
 }
@@ -51,5 +51,5 @@ export interface PatientParamsInput {
 export interface PatientUpdateInput {
   TableName: string;
   Item: Patient;
-  pythoScore?: string;
+  pythoScore?: number;
 }

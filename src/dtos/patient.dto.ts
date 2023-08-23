@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IsString, IsOptional, Allow } from 'class-validator';
+import { IsString, IsOptional, Allow, IsNumber } from 'class-validator';
 
 export class AllPatientParamsDto {
   @IsString()
@@ -67,8 +67,8 @@ export class PatientDto {
   @IsString()
   public identifier?: string;
 
-  @IsString()
-  public pythoScore: string;
+  @IsNumber()
+  public pythoScore: number;
 
   @Allow()
   @IsOptional()

@@ -32,9 +32,9 @@ class PythoScoreService {
    * @param identifier Patient unique identifier - ssn
    * @returns string
    */
-  public async getPythoScore(identifier: string, mock = false): Promise<string> {
+  public async getPythoScore(identifier: string, mock = false): Promise<number> {
     if (mock) {
-      return '25';
+      return Math.floor(Math.random() * 100);
     }
 
     const authResponse: AxiosResponse = await this.getToken();
