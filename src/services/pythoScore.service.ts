@@ -2,6 +2,8 @@ import { PYTHO_SCORE__PATIENT_API, PYTHO_SCORE_API_BASE_URL, PYTHO_SCORE_AUTH_AP
 import axios, { AxiosResponse } from 'axios';
 import { HttpException } from '@/exceptions/HttpException';
 
+const logKey = 'PythoScoreCalc API - ';
+
 class PythoScoreService {
   /**
    * Function to get access token from  Pytho Score APIs
@@ -22,8 +24,8 @@ class PythoScoreService {
           'Content-Type': 'application/json',
         },
       });
-    } catch (error) {
-      console.log('Error getToken', error);
+    } catch (err) {
+      console.log('Error getToken', err);
     }
   }
 
@@ -33,6 +35,7 @@ class PythoScoreService {
    * @returns string
    */
   public async getPythoScore(identifier: string, mock = false): Promise<number> {
+    console.log(`${logKey} Fetch Score - Mock ${mock}`);
     if (mock) {
       return Math.floor(Math.random() * 100);
     }

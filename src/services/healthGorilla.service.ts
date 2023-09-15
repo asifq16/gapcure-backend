@@ -23,6 +23,7 @@ const tokenData: TokenData = {
   token: null,
   expirationTime: null,
 };
+const logKey = 'HealthGorilla API - ';
 
 class HealthGorillaService {
   public patientService = new PatientService();
@@ -80,8 +81,9 @@ class HealthGorillaService {
       signature = base64url(signature);
       const signedToken = `${token}.${signature}`;
       return signedToken;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      console.log('Error getAssertionToken: ', err);
+      throw err;
     }
   }
 
@@ -109,8 +111,9 @@ class HealthGorillaService {
       };
 
       return await axios(config);
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      console.log('Error getToken: ', err);
+      throw err;
     }
   }
 
@@ -121,6 +124,7 @@ class HealthGorillaService {
    */
   public async getPatientInfo(identifier: string, mock = false): Promise<Patient> {
     try {
+      console.log(`${logKey} Fet Patient Info - Mock ${mock}`);
       let patientData: Patient;
 
       if (mock) {
@@ -155,13 +159,13 @@ class HealthGorillaService {
         .then(function (response) {
           return response?.data;
         })
-        .catch(function (error) {
-          throw error;
+        .catch(function (err) {
+          throw err;
         });
 
       return patientData;
     } catch (err) {
-      console.log('getPatientInfo Error: ', err);
+      console.log('Error getPatientInfo: ', err);
       if (err?.response?.status === 401) {
         tokenData.token = null;
         tokenData.expirationTime = null;
