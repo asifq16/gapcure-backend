@@ -88,3 +88,26 @@ export class PatientByQueryDto {
   @Allow()
   public ExpressionAttributeValues: { [key: string]: any };
 }
+
+export class GetAllPatientByQueryDto {
+  @IsString()
+  public TableName: string;
+
+  @Allow()
+  public IndexName: string;
+
+  @Allow()
+  public KeyConditionExpression: string;
+
+  @Allow()
+  public ExpressionAttributeValues: { [key: string]: any };
+
+  @Allow()
+  public FilterExpression: string;
+
+  @Allow()
+  public Limit: number;
+
+  @Allow()
+  public ScanIndexForward: boolean;
+}

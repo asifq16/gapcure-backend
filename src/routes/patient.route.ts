@@ -16,6 +16,7 @@ class UsersRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}/pytho-score`, validationMiddleware(PythoScoreDto, 'body'), this.patientController.pythoScore);
     this.router.get(`${this.path}/import-data`, this.patientController.importData);
+    this.router.get(`${this.path}s`, this.patientController.getAllPythoScoreWithPagination);
   }
 }
 
