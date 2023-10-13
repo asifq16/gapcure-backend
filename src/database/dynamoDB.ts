@@ -164,4 +164,17 @@ export default class DynamoDB {
       throw error;
     }
   };
+
+  getItemByQueryPagination = async (params: PatientByQueryDto) => {
+    const dynamodb = this.getDynamoClientInstance();
+    try {
+      const result = await dynamodb.query(params).promise();
+      return {
+        patients: result.Items,
+        LastEvaluatedKey: result.LastEvaluatedKey,
+      };
+    } catch (error) {
+      throw error;
+    }
+  };
 }

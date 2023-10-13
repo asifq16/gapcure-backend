@@ -148,6 +148,51 @@ class PatientController {
       next(error);
     }
   };
+
+  public getAllPythoScoreWithPagination = async (req: RequestWithInfo, res: Response, next: NextFunction) => {
+    try {
+      const identifier: string = req.body.identifier;
+      console.log('identifier: ', identifier);
+
+      const ExpressionAttributeValues = {
+        ':identifier': identifier,
+      };
+      let FilterExpression = '';
+      if (req.body.filter.gender) {
+        ExpressionAttributeValues[':gender'] = req.body.filter.gender;
+        FilterExpression += 'gender = :gender ';
+      }
+      if (req.body.filter.pythoScore) {
+        ExpressionAttributeValues[':pythoScore'] = req.body.filter.pythoScore;
+        FilterExpression += FilterExpression ? ' AND pythoScore = :pythoScore ' : 'pythoScore = :pythoScore';
+      }
+
+      const findPatientParams: any = {
+        TableName: DYNAMODB_TABLE_NAMES.PATIENT_TABLE,
+        IndexName: DYNAMODB_TABLE_INDEX.PATIENT_IDENTIFIER_INDEX,
+        KeyConditionExpression: 'identifier = :identifier',
+        ExpressionAttributeValues,
+        Limit: req.body.limit || 10,
+        ScanIndexForward: false,
+      };
+
+      if (FilterExpression.length > 0) {
+        findPatientParams.FilterExpression = FilterExpression;
+      }
+      if (req.body.ScanIndexForward || !req.body.ScanIndexBack) {
+        findPatientParams.ScanIndexForward = req.body.ScanIndexForward;
+      }
+
+      if (req.body.ExclusiveStartKey) {
+        findPatientParams.ExclusiveStartKey = req.body.ExclusiveStartKey;
+      }
+
+      const result = await this.patientService.getAllPythoScoreWithPaginationService(findPatientParams);
+      res.status(200).json({ message: 'Records fetching successfully.', patients: result.patients, ExclusiveStartKey: result.LastEvaluatedKey });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default PatientController;

@@ -1,7 +1,7 @@
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import DynamoDB from '@/database/dynamoDB';
-import { PatientByQueryDto } from '@/dtos/patient.dto';
+import { GetAllPatientByQueryDto, PatientByQueryDto } from '@/dtos/patient.dto';
 import { PatientParamsInput, PatientUpdateInput, Patient } from '@/interfaces/patient.interface';
 
 class PatientService {
@@ -98,6 +98,12 @@ class PatientService {
     }
 
     return [];
+  }
+
+  public async getAllPythoScoreWithPaginationService(params: GetAllPatientByQueryDto) {
+    if (isEmpty(params?.KeyConditionExpression)) throw new HttpException(400, 'Incorrect patient identifier');
+    const result = await this.dynamoDB.getItemByQueryPagination(params);
+    return result;
   }
 }
 
